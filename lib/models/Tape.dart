@@ -1,3 +1,4 @@
+import 'package:logger/logger.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Actions.dart';
 
@@ -37,5 +38,17 @@ class Tape {
           throw const TapeOperationException("NONE is not a valid operation");
       }
     }
+  }
+
+  void printTape() {
+    String s = "";
+    for (String symbol in tape) {
+      if (symbol == "") {
+        symbol = "e";
+      }
+      s += symbol + " ";
+    }
+    Logger().i("Cursor at $pointer");
+    Logger().i(s);
   }
 }
