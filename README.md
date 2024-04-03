@@ -39,28 +39,24 @@ This impossibility of solving the Halting Problem implies that the Entscheidungs
 #### Definition
 
 A Turing machine is a finite automaton that can read, write, and erase symbols on an infinitely long tape. The tape is divided into squares, and each square contains a symbol. The Turing machine can only read one symbol at a time, and it uses a set of rules (the transition function) to determine its next action based on the current state and the symbol it is reading.
-##### Components of a Turing Machine:
-Machine Configurations (M-Configs): These represent the different states of the Turing machine. Each M-Config defines the current state of the machine.
 
-Scanned Symbols: These are the symbols read by the Turing machine from the tape at any given step.
+##### Definitions for a Turing Machine:
 
-Actions: These actions determine what the Turing machine does based on the current M-Config and the scanned symbol. Actions can include writing a new symbol on the tape (represented as P followed by the symbol), moving the tape head left (L) or right (R), erasing a symbol (E), or transitioning to a new M-Config.
+**Machine Configurations (M-Configs):** These represent the different states of the Turing machine. Each M-Config defines the current state of the machine.
 
-Final M-Config: After performing the actions based on the scanned symbol and current M-Config, the Turing machine transitions to a new M-Config, representing its updated state.
+**Scanned Symbols:** These are the symbols read by the Turing machine from the tape at any given step.
+
+**Actions:** These actions determine what the Turing machine does based on the current M-Config and the scanned symbol. Actions can include writing a new symbol on the tape (represented as P followed by the symbol), moving the tape head left (L) or right (R), erasing a symbol (E), or transitioning to a new M-Config.
+
+**New M-Config:** After performing the actions based on the scanned symbol and current M-Config, the Turing machine transitions to a new M-Config, representing its updated state.
 
 #### Operation of a Turing Machine:
-Initial Configuration: The Turing machine starts in an initial M-Config with the tape containing an initial sequence of symbols.
 
-Processing: At each step, the Turing machine reads the symbol currently under the tape head (the scanned symbol). Based on the combination of the current M-Config and the scanned symbol, it performs specific actions, such as writing a new symbol, moving the tape head left or right, erasing a symbol, or transitioning to a new M-Config.
+**Initial Configuration:** The Turing machine starts in an initial M-Config with the tape containing an initial sequence of symbols.
 
-Final Configuration: After processing each symbol, the Turing machine reaches a new M-Config, indicating the completion of one iteration. The current m-configuration is now assigned the value of this new m-config,and computations can continue as long as long there exists a pair of actions and final m-config for the combination of the current m-config and scanned symbol.
+**Processing:** At each step, the Turing machine reads the symbol currently under the tape head (the scanned symbol). Based on the combination of the current M-Config and the scanned symbol, it performs specific actions, such as writing a new symbol, moving the tape head left or right, erasing a symbol, or transitioning to a new M-Config.
 
-##### Some Additional Definitions:
-
-Complete Configuration: The combination of the current M-Config and the scanned symbol at any step is called the complete configuration of the Turing machine.
-
-Behaviour: The sequence of actions and final M-Configs reached by the Turing machine as it processes the input symbols is called the behaviour of the machine.
-
+**New Configuration:** After processing each symbol, the Turing machine reaches a new M-Config, indicating the completion of one iteration. The current m-configuration is now assigned the value of this new m-config,and computations can continue as long as long there exists a pair of actions and new m-config for the combination of the current m-config and scanned symbol.
 
 #### Example Table for a Turing Machine:
 Consider a simple example of a Turing machine that prints the sequence 101010..... 
@@ -82,12 +78,19 @@ It comprises of:
 - and accepting (qaccept)
 - rejecting (qreject) states.
 
+## UML:
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/4b7a6c0c-e11e-422f-85d2-8be672a07b16)
+
+
+
 ## Purpose:
 
-This project aims to create a windows desktop application, built with flutter which allows users to create their own turing machines, complete with m-configs, symbols, actions and final m-configs.
+This project aims to create a windows desktop application, built with flutter which allows users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
 The logic for the project is available in the lib/models/ folder. Currently the UI and erroneous input checking are being worked on.
 When the first version is ready, it will be available in releases.
  
+
 
 
 
