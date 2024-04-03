@@ -26,12 +26,13 @@ class Testing {
     return machine;
   }
 
-  static void main() {
+  static TuringMachine main() {
     TuringMachine machine = _continuousZeroPrint();
-    machine.tape.printTape();
-    for (int i = 0; i < 10; i++) {
-      machine.stepIntoConfig();
-      machine.tape.printTape();
-    }
+    // machine.tape.printTape();
+    // for (int i = 0; i < 10; i++) {
+    //   machine.stepIntoConfig();
+    //   machine.tape.printTape();
+    // }
+    return machine;
   }
 }
