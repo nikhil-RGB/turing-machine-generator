@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:gap/gap.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TapeScreen.dart';
+import 'package:turing_machines/widgets/EntryForm.dart';
 
 class TableScreen extends StatefulWidget {
   const TableScreen({super.key, required this.machine});
@@ -11,12 +13,22 @@ class TableScreen extends StatefulWidget {
 }
 
 class _TableScreenState extends State<TableScreen> {
+  final TextEditingController _entryController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
           title: const Text("TableScreen"),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  setState(() {
+                    widget.machine.reset();
+                  });
+                },
+                icon: const Icon(Icons.restart_alt_rounded))
+          ],
         ),
         body: Center(
           child: Column(
@@ -87,19 +99,64 @@ class _TableScreenState extends State<TableScreen> {
                   ),
                 ],
               ),
-              const Gap(20),
+              const Gap(80),
+              const EntryForm(),
+              const Gap(22),
               ElevatedButton(
-                  onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (context) {
-                      return TapeScreen(machine: widget.machine);
-                    }));
-                  },
-                  child: const Text("Start/Resume Machine"))
+                onPressed: () {},
+                child: const Text("Add Row to table."),
+              ),
+              const Gap(80),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue,
+                ),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return TapeScreen(machine: widget.machine);
+                  }));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Text(
+                    "Create Machine",
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
   }
+
+  // Widget _inputEntryForm() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 10),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.center,
+  //       crossAxisAlignment: CrossAxisAlignment.baseline,
+  //       textBaseline: TextBaseline.alphabetic,
+  //       children: [
+  //         const Text("Input Table Entry"),
+  //         const Gap(10),
+  //         SizedBox(
+  //           height: 150,
+  //           width: 250,
+  //           child: TextField(
+  //             controller: _entryController,
+  //             decoration: const InputDecoration(
+  //               fillColor: Colors.blue,
+  //             ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }
