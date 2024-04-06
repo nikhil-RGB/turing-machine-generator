@@ -20,7 +20,7 @@ class _TapeScreenState extends State<TapeScreen> {
         IconButton(
             onPressed: () {
               setState(() {
-                widget.machine.reset(); //hard-reset on machine.
+                widget.machine.tape.reset(); //hard-reset on tape.
               });
             },
             icon: const Icon(

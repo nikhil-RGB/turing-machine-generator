@@ -18,11 +18,8 @@ class Testing {
       Behaviour(actions: Actions.parseActions("L"), f_config: "Q"),
       Behaviour(actions: Actions.parseActions("R,P0"), f_config: "Q"),
     ];
-    TuringMachine machine = TuringMachine(
-        configurations: configurations,
-        behaviours: behaviours,
-        tape: Tape(),
-        current_config: "B");
+    TuringMachine machine = TuringMachine(configurations, behaviours,
+        tape: Tape(), current_config: "B");
     return machine;
   }
 

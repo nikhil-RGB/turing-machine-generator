@@ -12,19 +12,17 @@ import 'package:turing_machines/models/Tape.dart';
 class TuringMachine {
   int iterations = 0;
   String current_config;
-  final List<Behaviour> behaviours;
-  final List<Configuration> configurations;
+  //TO-DO: Remove unnecessary fields
+  // final List<Behaviour> behaviours;
+  // final List<Configuration> configurations;
   final Tape tape;
   late HashMap<Configuration, Behaviour> machine;
-  TuringMachine(
-      {required this.configurations,
-      required this.behaviours,
-      required this.tape,
-      required this.current_config})
+  TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
+      {required this.tape, required this.current_config})
       : machine = HashMap() {
     //Write code to convert ordered entires into hashmap key-pair values
     // ignore: unnecessary_this
-    for (int i = 0; i < this.configurations.length; i++) {
+    for (int i = 0; i < configurations.length; i++) {
       Behaviour behaviour = behaviours[i];
       Configuration configuration = configurations[i];
       machine[configuration] = behaviour;
@@ -47,9 +45,21 @@ class TuringMachine {
   //resets the turing machine
   void reset() {
     //TO-DO:Implement reset() function for overall state of turing machine
+    machine.clear();
     iterations = 0; //Reset iteration counter
     tape.reset(); //hard-reset the tape of the turing machine
-    current_config =
-        configurations[0].m_config; //set m-config to first one is the table
+    current_config = machine.keys
+        .toList()[0]
+        .m_config; //set m-config to first one is the table
+  }
+
+  //Add an entry to the turing machine
+  void addEntry(Configuration config, Behaviour behave) {
+    machine[config] = behave;
+  }
+
+  //delete an entry
+  void deleteEntry(Configuration key) {
+    machine.remove(key);
   }
 }
