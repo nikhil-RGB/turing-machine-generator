@@ -1,5 +1,6 @@
 // ignore: file_names
 
+import 'package:flutter/material.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 
 //Represents an Action which can be performed on the tape of a turing machine.
@@ -32,6 +33,19 @@ class Actions {
       actions.add(object);
     }
     return actions;
+  }
+
+  static String printableListFrom(List<Actions> actionsList) {
+    String output = "";
+    for (Actions object in actionsList) {
+      String action = object.type.toString();
+      if (object.type == ActionType.P) {
+        action = action + object.symbol;
+      }
+      action = "$action,";
+      output = output + action;
+    }
+    return output;
   }
 
   @override
