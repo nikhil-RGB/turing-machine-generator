@@ -1,5 +1,14 @@
 class Configuration {
   const Configuration({required this.m_config, required this.symbol});
+  //Build a Configuration object by parsing a given String containing the
+  //m-config and scanned symbol.
+  //NOTE: The format should be: m-config, symbol
+  //If symbol is NONE, it will be processed NORMALLY.
+  factory Configuration.fromString(String input) {
+    List<String> components = input.split(",").map((e) => e.trim()).toList();
+    return Configuration(
+        m_config: components[0], symbol: parseSymbolInput(components[1]));
+  }
   final String m_config;
   final String symbol;
   @override
@@ -14,6 +23,11 @@ class Configuration {
 
   @override
   int get hashCode => m_config.hashCode ^ symbol.hashCode;
+
+  @override
+  String toString() {
+    return "$m_config, ${parseSymbolOutput(symbol)}";
+  }
 }
 
 //Parse symbol output,convert "" to "NONE" else no change
