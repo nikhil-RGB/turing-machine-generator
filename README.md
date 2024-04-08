@@ -89,6 +89,20 @@ It comprises of:
 This project aims to create a windows desktop application, built with flutter which allows users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
 The logic for the project is available in the lib/models/ folder. Currently the UI and erroneous input checking are being worked on.
 When the first version is ready, it will be available in releases.
+
+## Screenshots:
+
+> [!NOTE]  
+> The project overall, and especially the UI is under development and subject to constant improvement and modification, the following screenshots
+> are representative only of the current state of the application.
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/a632e470-23d7-433d-a0b0-69fdf97dd047)
+
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/c98fc5f7-427c-41ae-b575-11e3b2f992cb)
+
+
  
 
 
