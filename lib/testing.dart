@@ -19,7 +19,7 @@ class Testing {
       Behaviour(actions: Actions.parseActions("R,P0"), f_config: "Q"),
     ];
     TuringMachine machine = TuringMachine(configurations, behaviours,
-        tape: Tape(), current_config: "B");
+        tape: Tape(), initial_config: "B");
     return machine;
   }
 

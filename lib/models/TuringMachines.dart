@@ -4,6 +4,7 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:collection';
+import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
@@ -11,15 +12,17 @@ import 'package:turing_machines/models/Tape.dart';
 //An object of this class represents a hypothetical turing machine, complete with a tape, m-configs, scanned symbols,Actions adn a final m-config post-action execution
 class TuringMachine {
   int iterations = 0;
+  String initial_config;
   String current_config;
   //TO-DO: Remove unnecessary fields
   // final List<Behaviour> behaviours;
   // final List<Configuration> configurations;
   final Tape tape;
-  late HashMap<Configuration, Behaviour> machine;
+  late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
-      {required this.tape, required this.current_config})
-      : machine = HashMap() {
+      {required this.tape, required this.initial_config})
+      : machine = LinkedHashMap(),
+        current_config = initial_config {
     //Write code to convert ordered entires into hashmap key-pair values
     // ignore: unnecessary_this
     for (int i = 0; i < configurations.length; i++) {
@@ -30,15 +33,20 @@ class TuringMachine {
   }
 
   //Updates the state of the turing machine by exactly one Configuration-Behavior pair computation.
+  //Returns true if the step was successful, false otherwise
   void stepIntoConfig() {
     Configuration key =
         Configuration(m_config: current_config, symbol: tape.symbol);
     //TO-DO:Override equals and hashcode functions for all composite data types to ensure proper key matching while referencing the hash map.
     //DONE: 3:51 AM 01-04-2024
+    if (machine[key] == null) {
+      throw const InvalidLookupException();
+    }
     Behaviour value = machine[key]!;
     tape.process(value.actions);
     current_config = value.f_config;
     ++iterations;
+
     //machine has progressed and computed one <config,behaviour> pair
   }
 
@@ -48,9 +56,14 @@ class TuringMachine {
     machine.clear();
     iterations = 0; //Reset iteration counter
     tape.reset(); //hard-reset the tape of the turing machine
-    current_config = machine.keys
-        .toList()[0]
-        .m_config; //set m-config to first one is the table
+    current_config = initial_config; //set back to initial configuration
+  }
+
+  //FIX-IT:Make sure there is a variable to reference original m-config for reset
+  void softReset() {
+    iterations = 0;
+    tape.reset();
+    current_config = initial_config;
   }
 
   //Add an entry to the turing machine
