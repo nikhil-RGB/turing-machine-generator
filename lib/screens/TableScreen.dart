@@ -18,6 +18,7 @@ class TableScreen extends StatefulWidget {
 
 class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyDelete = GlobalKey<FormState>();
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
     TextEditingController(),
@@ -25,11 +26,15 @@ class _TableScreenState extends State<TableScreen> {
     TextEditingController(),
     TextEditingController(),
   ];
+  String deleteValue = "NONE";
+
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs;
   final List<Function(String?)> validators = <Function(String?)>[
     (value) {
       if (value == null || value.isEmpty) {
         return "m-config cannot be empty";
+      } else if (value.contains(" ")) {
+        return "m-config cannot contain spaces";
       }
       return null;
     },
@@ -77,6 +82,7 @@ class _TableScreenState extends State<TableScreen> {
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SingleChildScrollView(
                 child: DataTable(
@@ -120,36 +126,10 @@ class _TableScreenState extends State<TableScreen> {
                   rows: buildEntries(),
                 ),
               ),
-              const Gap(80),
+              const Gap(60),
               entryForm(),
-              const Gap(22),
-              ElevatedButton(
-                onPressed: () {
-                  if ((_formKey.currentState!.validate())) {
-                    Configuration config = Configuration(
-                        m_config: _controllers[0].text,
-                        symbol: parseSymbolInput(_controllers[1].text));
-                    Behaviour behaviour = Behaviour(
-                        actions:
-                            actions.Actions.parseActions(_controllers[2].text),
-                        f_config: _controllers[3].text);
-
-                    setState(() {
-                      widget.machine.addEntry(config, behaviour);
-                    });
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Data Entry added')),
-                    );
-                    //Construct and add entry to machine
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Invalid Data Entry')),
-                    );
-                  }
-                },
-                child: const Text("Add Row to table."),
-              ),
+              const Gap(20),
+              deleteDropDown(),
               const Gap(80),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
@@ -176,6 +156,63 @@ class _TableScreenState extends State<TableScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  //Creates the drop down and associated button required to delete a configuration.
+  Widget deleteDropDown() {
+    List<String> availableConfigs =
+        widget.machine.machine.keys.map((config) => config.toString()).toList();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        DropdownButton(
+          items: availableConfigs.map((config) {
+            return DropdownMenuItem(
+              value: config,
+              child: Text(config),
+            );
+          }).toList()
+            ..insert(
+              0,
+              const DropdownMenuItem(
+                value: "NONE",
+                child: Text("NONE"),
+              ),
+            ),
+          value: deleteValue,
+          onChanged: (widget.machine.machine.isEmpty)
+              ? null
+              : (Object? value) {
+                  setState(() {
+                    deleteValue = value as String;
+                  });
+                },
+        ),
+        const Gap(12.0),
+        ElevatedButton(
+            onPressed: (widget.machine.machine.isEmpty)
+                ? null
+                : () {
+                    if (deleteValue == "NONE") {
+                      return;
+                    }
+                    Configuration toBeDeleted =
+                        Configuration.fromString(deleteValue);
+                    setState(() {
+                      deleteValue = "NONE";
+                      widget.machine.machine.remove(toBeDeleted);
+                    });
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('$toBeDeleted deleted')),
+                    );
+                  },
+            child: const Text(
+              "Delete",
+              style: TextStyle(color: Colors.red),
+            ))
+      ],
     );
   }
 
@@ -223,6 +260,33 @@ class _TableScreenState extends State<TableScreen> {
             label: "Input final M-config",
             hint: "Example: Q",
             index: 3,
+          ),
+          const Gap(22),
+          ElevatedButton(
+            onPressed: () {
+              if ((_formKey.currentState!.validate())) {
+                Configuration config = Configuration(
+                    m_config: _controllers[0].text,
+                    symbol: parseSymbolInput(_controllers[1].text));
+                Behaviour behaviour = Behaviour(
+                    actions: actions.Actions.parseActions(_controllers[2].text),
+                    f_config: _controllers[3].text);
+
+                setState(() {
+                  widget.machine.addEntry(config, behaviour);
+                });
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Data Entry added')),
+                );
+                //Construct and add entry to machine
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Invalid Data Entry')),
+                );
+              }
+            },
+            child: const Text("Add Row to table."),
           ),
         ],
       ),
