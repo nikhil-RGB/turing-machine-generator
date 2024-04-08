@@ -51,4 +51,15 @@ class Tape {
     Logger().i("Cursor at $pointer");
     Logger().i(s);
   }
+
+  //default tape for a turing machine at iteration 0
+  static List<String> defaultTape() {
+    return ["", "", "", "", "", "", "", "", "", ""];
+  }
+
+  //Hard reset for the tape of the turing machine
+  void reset() {
+    pointer = 0;
+    tape = defaultTape();
+  }
 }
