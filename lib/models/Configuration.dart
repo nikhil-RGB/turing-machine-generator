@@ -18,8 +18,10 @@ class Configuration {
           runtimeType == other.runtimeType &&
           m_config == other.m_config &&
           ((symbol == other.symbol) ||
-              (symbol.toLowerCase() == "any") ||
-              (other.symbol.toLowerCase() == "any"));
+              (symbol.toLowerCase() == "any" &&
+                  other.symbol.toLowerCase() != "none") ||
+              (other.symbol.toLowerCase() == "any" &&
+                  symbol.toLowerCase() != "none"));
 
   @override
   int get hashCode => m_config.hashCode ^ symbol.hashCode;
@@ -42,6 +44,8 @@ String parseSymbolOutput(String output) {
 String parseSymbolInput(String input) {
   if (input.toLowerCase() == "none") {
     return "";
+  } else if (input.toLowerCase() == "any") {
+    return "ANY";
   }
   return input;
 }

@@ -9,3 +9,9 @@ class TapeOperationException implements Exception {
   const TapeOperationException(
       [this.message = "Tape is unable to comply with an invalid Action!"]);
 }
+
+class InvalidLookupException implements Exception {
+  final String message;
+  const InvalidLookupException(
+      [this.message = "No Configuration-Action pair found to match input!"]);
+}

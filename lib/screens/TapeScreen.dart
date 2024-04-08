@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/widgets/TapeWidget.dart';
 import 'package:gap/gap.dart';
@@ -20,7 +21,8 @@ class _TapeScreenState extends State<TapeScreen> {
         IconButton(
             onPressed: () {
               setState(() {
-                widget.machine.tape.reset(); //hard-reset on tape.
+                widget.machine
+                    .softReset(); //hard-reset on tape,soft-reset on machine state.
               });
             },
             icon: const Icon(
@@ -68,9 +70,29 @@ class _TapeScreenState extends State<TapeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          setState(() {
+          bool result = true;
+          try {
             widget.machine.stepIntoConfig();
-          });
+          } on InvalidLookupException {
+            result = false;
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Turing Machine has Halted!'),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } on TapeOperationException catch (e) {
+            result = false;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(e.message),
+                backgroundColor: Colors.red,
+              ),
+            );
+          }
+          if (result) {
+            setState(() {});
+          }
         },
         backgroundColor: Colors.blue,
         child: const Icon(Icons.play_arrow_outlined),

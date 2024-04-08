@@ -18,7 +18,7 @@ class TableScreen extends StatefulWidget {
 
 class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKeyDelete = GlobalKey<FormState>();
+
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
     TextEditingController(),
@@ -27,6 +27,7 @@ class _TableScreenState extends State<TableScreen> {
     TextEditingController(),
   ];
   String deleteValue = "NONE";
+  String initialConfigValue = "NONE";
 
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs;
   final List<Function(String?)> validators = <Function(String?)>[
@@ -59,6 +60,8 @@ class _TableScreenState extends State<TableScreen> {
     (value) {
       if (value == null || value.isEmpty) {
         return "m-config cannot be empty";
+      } else if (value.contains(" ")) {
+        return "m-config cannot contain spaces";
       }
       return null;
     },
@@ -73,6 +76,11 @@ class _TableScreenState extends State<TableScreen> {
             IconButton(
                 onPressed: () {
                   setState(() {
+                    initialConfigValue = "NONE";
+                    deleteValue = "NONE";
+                    for (TextEditingController contr in _controllers) {
+                      contr.clear();
+                    }
                     widget.machine.reset();
                   });
                 },
@@ -130,12 +138,26 @@ class _TableScreenState extends State<TableScreen> {
               entryForm(),
               const Gap(20),
               deleteDropDown(),
-              const Gap(80),
+              const Gap(20),
+              selectInitialConfigDropDown(),
+              const Gap(70),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
                 onPressed: () {
+                  if (initialConfigValue == "NONE") {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content:
+                            Text('Initial M-Configuration cannot be empty'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                    return;
+                  }
+                  // widget.machine.initial_config = initialConfigValue;
+                  // widget.machine.current_config = initialConfigValue;
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (context) {
                     return TapeScreen(machine: widget.machine);
@@ -156,6 +178,50 @@ class _TableScreenState extends State<TableScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  //Creates the drop down to select the initial configuration for the turing machine
+  Widget selectInitialConfigDropDown() {
+    List<String> availableConfigs = widget.machine.machine.keys
+        .map((config) => config.m_config)
+        .toSet()
+        .toList();
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text("Select initial M-Config"),
+        const Gap(13.0),
+        DropdownButton(
+          value: initialConfigValue,
+          items: availableConfigs.map((config) {
+            return DropdownMenuItem(
+              value: config,
+              child: Text(config),
+            );
+          }).toList()
+            ..insert(
+              0,
+              const DropdownMenuItem(
+                value: "NONE",
+                child: Text("NONE"),
+              ),
+            ),
+          onChanged: (widget.machine.machine.isEmpty)
+              ? null
+              : (Object? value) {
+                  if (value == null || value == "NONE") {
+                    return;
+                  }
+                  setState(() {
+                    initialConfigValue = value as String;
+                    widget.machine.current_config = initialConfigValue;
+                    widget.machine.initial_config = initialConfigValue;
+                  });
+                },
+        ),
+      ],
     );
   }
 
@@ -184,6 +250,9 @@ class _TableScreenState extends State<TableScreen> {
           onChanged: (widget.machine.machine.isEmpty)
               ? null
               : (Object? value) {
+                  if (value == null) {
+                    return;
+                  }
                   setState(() {
                     deleteValue = value as String;
                   });
@@ -200,6 +269,9 @@ class _TableScreenState extends State<TableScreen> {
                     Configuration toBeDeleted =
                         Configuration.fromString(deleteValue);
                     setState(() {
+                      if (toBeDeleted.m_config == initialConfigValue) {
+                        initialConfigValue = "NONE";
+                      }
                       deleteValue = "NONE";
                       widget.machine.machine.remove(toBeDeleted);
                     });
@@ -251,7 +323,7 @@ class _TableScreenState extends State<TableScreen> {
           ),
           const Gap(3),
           _fieldInput(
-            label: "Input Actions(Px,R,L,E) separated by 0",
+            label: "Input Actions(Px,R,L,E) separated by ,",
             hint: "Example: P0,R,P1",
             index: 2,
           ),
@@ -273,6 +345,9 @@ class _TableScreenState extends State<TableScreen> {
                     f_config: _controllers[3].text);
 
                 setState(() {
+                  for (TextEditingController contr in _controllers) {
+                    contr.clear();
+                  }
                   widget.machine.addEntry(config, behaviour);
                 });
 
@@ -308,7 +383,7 @@ class _TableScreenState extends State<TableScreen> {
           validator: (value) {
             return validators[index](value);
           },
-          autovalidateMode: AutovalidateMode.onUserInteraction,
+          autovalidateMode: AutovalidateMode.disabled,
           controller: _controllers[index],
           decoration: InputDecoration(
             labelText: label,
