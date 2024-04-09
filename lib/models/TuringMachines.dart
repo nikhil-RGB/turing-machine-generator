@@ -40,7 +40,11 @@ class TuringMachine {
     //TO-DO:Override equals and hashcode functions for all composite data types to ensure proper key matching while referencing the hash map.
     //DONE: 3:51 AM 01-04-2024
     if (machine[key] == null) {
-      throw const InvalidLookupException();
+      //Code to check if (m_config,any) exists
+      key = Configuration(m_config: current_config, symbol: "ANY");
+      if (machine[key] == null || tape.symbol == "") {
+        throw const InvalidLookupException();
+      }
     }
     Behaviour value = machine[key]!;
     tape.process(value.actions);
