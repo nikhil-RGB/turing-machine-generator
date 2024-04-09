@@ -38,14 +38,14 @@ class Actions {
   static String printableListFrom(List<Actions> actionsList) {
     String output = "";
     for (Actions object in actionsList) {
-      String action = object.type.toString();
+      String action = object.type.name;
       if (object.type == ActionType.P) {
         action = action + object.symbol;
       }
       action = "$action,";
       output = output + action;
     }
-    return output;
+    return output.substring(0, output.length - 1);
   }
 
   @override

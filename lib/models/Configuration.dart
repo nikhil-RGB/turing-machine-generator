@@ -18,13 +18,14 @@ class Configuration {
           runtimeType == other.runtimeType &&
           m_config == other.m_config &&
           ((symbol == other.symbol) ||
-              (symbol.toLowerCase() == "any" &&
-                  other.symbol.toLowerCase() != "none") ||
-              (other.symbol.toLowerCase() == "any" &&
-                  symbol.toLowerCase() != "none"));
+              (symbol.toLowerCase() == "any" && other.symbol != "") ||
+              (other.symbol.toLowerCase() == "any" && symbol != ""));
 
   @override
   int get hashCode => m_config.hashCode ^ symbol.hashCode;
+
+  // int _symbolHashCode(String symbol) =>
+  //     symbol.toLowerCase() == "any" ? 42 : symbol.hashCode;
 
   @override
   String toString() {
