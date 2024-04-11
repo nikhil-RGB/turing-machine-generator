@@ -7,12 +7,13 @@ import 'package:gap/gap.dart';
 class TapeScreen extends StatefulWidget {
   final TuringMachine machine;
   const TapeScreen({super.key, required this.machine});
-
+  final double tape_cell_width = 50.0;
   @override
   State<TapeScreen> createState() => _TapeScreenState();
 }
 
 class _TapeScreenState extends State<TapeScreen> {
+  final ScrollController _sc = ScrollController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -38,7 +39,9 @@ class _TapeScreenState extends State<TapeScreen> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TapeWidget(
+              cell_width: widget.tape_cell_width,
               tape: widget.machine.tape,
+              s_controller: _sc,
             ),
           ),
           const Gap(20),
@@ -92,6 +95,11 @@ class _TapeScreenState extends State<TapeScreen> {
           }
           if (result) {
             setState(() {});
+            _sc.animateTo(
+              (widget.tape_cell_width * widget.machine.tape.pointer),
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.ease,
+            );
           }
         },
         backgroundColor: Colors.blue,
