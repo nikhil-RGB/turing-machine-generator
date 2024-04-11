@@ -18,6 +18,7 @@ class TableScreen extends StatefulWidget {
 
 class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ScrollController _scrollController = ScrollController();
 
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
@@ -92,46 +93,55 @@ class _TableScreenState extends State<TableScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              SingleChildScrollView(
-                child: DataTable(
-                  decoration: const BoxDecoration(
-                    color: Colors.blue, // Set the background color here
+              Scrollbar(
+                thumbVisibility: true,
+                trackVisibility: true,
+                controller: _scrollController,
+                child: SizedBox(
+                  height: 400,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    child: DataTable(
+                      decoration: const BoxDecoration(
+                        color: Colors.blue, // Set the background color here
+                      ),
+                      columns: const <DataColumn>[
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'M-config',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Symbol',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'Actions',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Expanded(
+                            child: Text(
+                              'New m-config',
+                              style: TextStyle(fontStyle: FontStyle.italic),
+                            ),
+                          ),
+                        ),
+                      ],
+                      rows: buildEntries(),
+                    ),
                   ),
-                  columns: const <DataColumn>[
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'M-config',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'Symbol',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'Actions',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Expanded(
-                        child: Text(
-                          'New m-config',
-                          style: TextStyle(fontStyle: FontStyle.italic),
-                        ),
-                      ),
-                    ),
-                  ],
-                  rows: buildEntries(),
                 ),
               ),
               const Gap(60),
