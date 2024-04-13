@@ -44,3 +44,5 @@ app.*.map.json
 
 # installers
 *.iss
+#firebase
+.firebase/
