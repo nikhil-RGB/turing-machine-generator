@@ -46,3 +46,5 @@ app.*.map.json
 *.iss
 #firebase
 .firebase/
+#information
+data.txt

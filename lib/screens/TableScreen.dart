@@ -3,8 +3,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
+import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
+import 'package:turing_machines/models/Targets.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/models/Actions.dart' as actions;
 import 'package:turing_machines/screens/TapeScreen.dart';
@@ -69,6 +71,11 @@ class _TableScreenState extends State<TableScreen> {
   ];
   @override
   Widget build(BuildContext context) {
+    Targets platform = target;
+    Size size = MediaQuery.of(context).size;
+    if (size.width <= 480 && (platform == Targets.WEB)) {
+      platform = Targets.ANDROID;
+    }
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -89,102 +96,109 @@ class _TableScreenState extends State<TableScreen> {
           ],
         ),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Scrollbar(
-                thumbVisibility: true,
-                trackVisibility: true,
-                controller: _scrollController,
-                child: SizedBox(
-                  height: 400,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    child: DataTable(
-                      decoration: const BoxDecoration(
-                        color: Colors.blue, // Set the background color here
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Scrollbar(
+                  thumbVisibility: true,
+                  trackVisibility: true,
+                  controller: _scrollController,
+                  child: SizedBox(
+                    height: (platform == Targets.ANDROID) ? 200 : 400,
+                    child: SingleChildScrollView(
+                      controller: _scrollController,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                        child: DataTable(
+                          columnSpacing:
+                              (platform == Targets.ANDROID) ? 18 : 56,
+                          decoration: const BoxDecoration(
+                            color: Colors.blue, // Set the background color here
+                          ),
+                          columns: const <DataColumn>[
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'M-config',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Symbol',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'Actions',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                            DataColumn(
+                              label: Expanded(
+                                child: Text(
+                                  'New m-config',
+                                  style: TextStyle(fontStyle: FontStyle.italic),
+                                ),
+                              ),
+                            ),
+                          ],
+                          rows: buildEntries(),
+                        ),
                       ),
-                      columns: const <DataColumn>[
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'M-config',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Symbol',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'Actions',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Expanded(
-                            child: Text(
-                              'New m-config',
-                              style: TextStyle(fontStyle: FontStyle.italic),
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: buildEntries(),
                     ),
                   ),
                 ),
-              ),
-              const Gap(60),
-              entryForm(),
-              const Gap(20),
-              deleteDropDown(),
-              const Gap(20),
-              selectInitialConfigDropDown(),
-              const Gap(70),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                ),
-                onPressed: () {
-                  if (initialConfigValue == "NONE") {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content:
-                            Text('Initial M-Configuration cannot be empty'),
-                        backgroundColor: Colors.red,
-                      ),
-                    );
-                    return;
-                  }
-                  // widget.machine.initial_config = initialConfigValue;
-                  // widget.machine.current_config = initialConfigValue;
-                  Navigator.of(context)
-                      .push(MaterialPageRoute(builder: (context) {
-                    return TapeScreen(machine: widget.machine);
-                  }));
-                },
-                child: const Padding(
-                  padding: EdgeInsets.all(10.0),
-                  child: Text(
-                    "Create Machine",
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.black),
+                const Gap(60),
+                entryForm(platform: platform),
+                const Gap(20),
+                deleteDropDown(),
+                const Gap(20),
+                selectInitialConfigDropDown(),
+                const Gap(70),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blue,
+                  ),
+                  onPressed: () {
+                    if (initialConfigValue == "NONE") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content:
+                              Text('Initial M-Configuration cannot be empty'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                    }
+                    // widget.machine.initial_config = initialConfigValue;
+                    // widget.machine.current_config = initialConfigValue;
+                    Navigator.of(context)
+                        .push(MaterialPageRoute(builder: (context) {
+                      return TapeScreen(machine: widget.machine);
+                    }));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(15.0),
+                    child: Text(
+                      "Create Machine",
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -313,82 +327,159 @@ class _TableScreenState extends State<TableScreen> {
     return dataRows;
   }
 
-  Form entryForm() {
+  Form entryForm({required Targets platform}) {
     return Form(
       key: _formKey,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _fieldInput(
-            label: "Input M-Config",
-            hint: "Example: B",
-            index: 0,
-          ),
-          const Gap(3),
-          _fieldInput(
-            label: "Input Scanned Symbol",
-            hint: "Example: 0",
-            index: 1,
-          ),
-          const Gap(3),
-          _fieldInput(
-            label: "Input Actions(Px,R,L,E) separated by ,",
-            hint: "Example: P0,R,P1",
-            index: 2,
-          ),
-          const Gap(3),
-          _fieldInput(
-            label: "Input final M-config",
-            hint: "Example: Q",
-            index: 3,
-          ),
-          const Gap(22),
-          ElevatedButton(
-            onPressed: () {
-              if ((_formKey.currentState!.validate())) {
-                Configuration config = Configuration(
-                    m_config: _controllers[0].text,
-                    symbol: parseSymbolInput(_controllers[1].text));
-                Behaviour behaviour = Behaviour(
-                    actions: actions.Actions.parseActions(_controllers[2].text),
-                    f_config: _controllers[3].text);
+      child: (platform == Targets.ANDROID)
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _fieldInput(
+                  label: "Input M-Config",
+                  hint: "Example: B",
+                  index: 0,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input Scanned Symbol",
+                  hint: "Example: 0",
+                  index: 1,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input Actions(Px,R,L,E) separated by ,",
+                  hint: "Example: P0,R,P1",
+                  index: 2,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input final M-config",
+                  hint: "Example: Q",
+                  index: 3,
+                  platform: platform,
+                ),
+                const Gap(22),
+                ElevatedButton(
+                  onPressed: () {
+                    if ((_formKey.currentState!.validate())) {
+                      Configuration config = Configuration(
+                          m_config: _controllers[0].text,
+                          symbol: parseSymbolInput(_controllers[1].text));
+                      Behaviour behaviour = Behaviour(
+                          actions: actions.Actions.parseActions(
+                              _controllers[2].text),
+                          f_config: _controllers[3].text);
 
-                setState(() {
-                  for (TextEditingController contr in _controllers) {
-                    contr.clear();
-                  }
-                  widget.machine.addEntry(config, behaviour);
-                });
+                      setState(() {
+                        for (TextEditingController contr in _controllers) {
+                          contr.clear();
+                        }
+                        widget.machine.addEntry(config, behaviour);
+                      });
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Data Entry added')),
-                );
-                //Construct and add entry to machine
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Invalid Data Entry')),
-                );
-              }
-            },
-            child: const Text("Add Row to table."),
-          ),
-        ],
-      ),
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Data Entry added')),
+                      );
+                      //Construct and add entry to machine
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid Data Entry'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text("Add Row to table."),
+                ),
+              ],
+            )
+          : Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _fieldInput(
+                  label: "Input M-Config",
+                  hint: "Example: B",
+                  index: 0,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input Scanned Symbol",
+                  hint: "Example: 0",
+                  index: 1,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input Actions(Px,R,L,E) separated by ,",
+                  hint: "Example: P0,R,P1",
+                  index: 2,
+                  platform: platform,
+                ),
+                const Gap(3),
+                _fieldInput(
+                  label: "Input final M-config",
+                  hint: "Example: Q",
+                  index: 3,
+                  platform: platform,
+                ),
+                const Gap(22),
+                ElevatedButton(
+                  onPressed: () {
+                    if ((_formKey.currentState!.validate())) {
+                      Configuration config = Configuration(
+                          m_config: _controllers[0].text,
+                          symbol: parseSymbolInput(_controllers[1].text));
+                      Behaviour behaviour = Behaviour(
+                          actions: actions.Actions.parseActions(
+                              _controllers[2].text),
+                          f_config: _controllers[3].text);
+
+                      setState(() {
+                        for (TextEditingController contr in _controllers) {
+                          contr.clear();
+                        }
+                        widget.machine.addEntry(config, behaviour);
+                      });
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Data Entry added')),
+                      );
+                      //Construct and add entry to machine
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Invalid Data Entry'),
+                          backgroundColor: Colors.redAccent,
+                        ),
+                      );
+                    }
+                  },
+                  child: const Text("Add Row to table."),
+                ),
+              ],
+            ),
     );
   }
 
   //custom widgets
-  Widget _fieldInput({
-    required String label,
-    required String hint,
-    required int index,
-    // required Function(String?) validator,
-  }) {
+  Widget _fieldInput(
+      {required String label,
+      required String hint,
+      required int index,
+      required Targets platform
+      // required Function(String?) validator,
+      }) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 5),
       child: SizedBox(
-        width: (index == 2) ? 400 : 250,
+        width: (index == 2 && platform != Targets.ANDROID) ? 400 : 250,
         child: TextFormField(
           validator: (value) {
             return validators[index](value);
