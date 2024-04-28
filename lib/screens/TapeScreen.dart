@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
@@ -5,8 +7,9 @@ import 'package:turing_machines/widgets/TapeWidget.dart';
 import 'package:gap/gap.dart';
 
 class TapeScreen extends StatefulWidget {
+  bool _followHead = true;
   final TuringMachine machine;
-  const TapeScreen({super.key, required this.machine});
+  TapeScreen({super.key, required this.machine});
   final double tape_cell_width = 50.0;
   @override
   State<TapeScreen> createState() => _TapeScreenState();
@@ -69,6 +72,34 @@ class _TapeScreenState extends State<TapeScreen> {
                 color: Colors.blue, fontWeight: FontWeight.bold),
           ),
           const Gap(5),
+          SizedBox(
+            width: 220,
+            child: CheckboxListTile(
+              title: Text(
+                "Follow Head Pointer",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: (widget._followHead) ? Colors.blue : Colors.black,
+                ),
+              ),
+              value: widget._followHead,
+              controlAffinity: ListTileControlAffinity.leading,
+              secondary: Icon(
+                Icons.follow_the_signs,
+                color: (widget._followHead) ? Colors.blue : Colors.black,
+              ),
+              activeColor: Colors.blue,
+              onChanged: (bool? val) {
+                if (val == null) {
+                  return;
+                }
+                setState(() {
+                  widget._followHead = val;
+                });
+              },
+            ),
+          )
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -95,11 +126,13 @@ class _TapeScreenState extends State<TapeScreen> {
           }
           if (result) {
             setState(() {});
-            _sc.animateTo(
-              (widget.tape_cell_width * widget.machine.tape.pointer),
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.ease,
-            );
+            if (widget._followHead) {
+              _sc.animateTo(
+                (widget.tape_cell_width * widget.machine.tape.pointer),
+                duration: const Duration(milliseconds: 200),
+                curve: Curves.ease,
+              );
+            }
           }
         },
         backgroundColor: Colors.blue,
