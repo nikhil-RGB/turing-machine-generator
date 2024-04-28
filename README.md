@@ -1,4 +1,12 @@
 ## Turing Machine Generator:
+
+> [!TIP]
+> <strong> If you are familiar with what a turing machine is, you can skip directly to the "Screenshots and How to Use" section <br>
+> to familiarize yourself with the software. </strong>
+
+
+
+
 Alan Turing in his 1936 research paper, "On Computable Numbers, with an Application to the Entscheidungsproblem" defined the concept of what is now known as a "Turing Machine".
 Turing's paper majorly dealt with the "computability" of a number, and aiming to find whether the [Entscheidungsproblem](https://en.wikipedia.org/wiki/Entscheidungsproblem) is solvable.
 
@@ -27,7 +35,7 @@ Turing introduced the idea of computable numbers and functions, essentially defi
 
 This impossibility of solving the Halting Problem implies that the Entscheidungsproblem is also unsolvable. There cannot be a universal method to decide the truth or falsehood of every statement in first-order logic. Turing's findings laid foundational concepts in computability and showed the limits of what algorithms can solve, significantly impacting mathematics and computer science.
 
-### Breif on the Design and Operation of Turing Machines:
+### Brief on the Design and Operation of Turing Machines:
 
 > [!IMPORTANT]  
 > The first 6-7 pages of Alan Turing's research paper introduce the concepts of computability, alongside the basic construction and operation of an
@@ -36,11 +44,11 @@ This impossibility of solving the Halting Problem implies that the Entscheidungs
 > m-config c should be e, not c.
 
 
-#### Definition
+### Definition
 
 A Turing machine is a finite automaton that can read, write, and erase symbols on an infinitely long tape. The tape is divided into squares, and each square contains a symbol. The Turing machine can only read one symbol at a time, and it uses a set of rules (the transition function) to determine its next action based on the current state and the symbol it is reading.
 
-##### Definitions for a Turing Machine:
+### Definitions for a Turing Machine:
 
 **Machine Configurations (M-Configs):** These represent the different states of the Turing machine. Each M-Config defines the current state of the machine.
 
@@ -80,28 +88,82 @@ It comprises of:
 
 ## UML:
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/4b7a6c0c-e11e-422f-85d2-8be672a07b16)
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/d3379b74-26e0-456d-8704-95a895c8ac81)
 
-
+<br>
 
 ## Purpose:
 
-This project aims to create a windows desktop application, built with flutter which allows users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
-The logic for the project is available in the lib/models/ folder. Currently the UI and erroneous input checking are being worked on.
-When the first version is ready, it will be available in releases.
+This project aims to create a windows desktop application,mobile app and web-app built with flutter which allow users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
+The logic for the project is available in the lib/models/ folder. You can find the apk/exe file in the [releases](https://github.com/nikhil-RGB/turing-machine-generator/releases)
+section. There is also a [web deployment](https://turing-machines-14433.web.app)
 
-## Screenshots:
+## Screenshots and How to Use:
 
 > [!NOTE]  
 > The project overall, and especially the UI is under development and subject to constant improvement and modification, the following screenshots
 > are representative only of the current state of the application.
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/a632e470-23d7-433d-a0b0-69fdf97dd047)
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/90685148-5d69-4e41-afa8-0b40b56077f1)
 
 <br>
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/c98fc5f7-427c-41ae-b575-11e3b2f992cb)
+#### Table Screen:
 
+
+
+- The Table on this screen represents the Turing Machine's behaviour. It consists of the following columns: M-config, Symbol, Actions, New m-config.
+- Each entry in this table, therefore can be read as: While the machine is in [M-config] and the tape-head is reading symbol [Symbol], execute [Actions] and switch into [New m- 
+  config].
+- The table initially displays a sample turing machine which continuously prints 0's and moves the tape head right. You can reset the entire machine and start afresh with the 
+  restart icon button in the top-right. This erases and resets the tape and deletes the table.
+- You can add new entries by inputting m-config,symbol scanned,actions and final m-config into the labelled textFields and clicking on the "Add Row" button.
+- You can select a particular entry you want to delete via selecting it in the associated drop-down and clicking on the delete button.
+- You can select an initial m-config via it's associated dropdown.
+- <strong> Grammar-Parsing: </strong> If you want to check for the correctness of a certain input with respect to the grammar defined by the turing-machine created, you can input an 
+  initial tape string via it's associated text-field located at the bottom of the screen. Once the string is inputted, click on the "Print onto Tape" button to apply the change. 
+  Note that while this resets the tape pointer to 0 and makes it so that the tape is initially only as big as the input provided(each character populates one tape-cell), it **will 
+  not** reset the current m-config to the initial m-config.
+- Once you are satisfied with your changes, click on the "Create/Resume Machine" button.
+
+> [!IMPORTANT]  
+> There are 2 special symbols: ```ANY``` and ```NONE```. <br>  ```ANY``` is a wildcard and will match every symbol. ```NONE``` represents a blank cell ("").<br>
+> If there are multiple entries for a particular m-config for different scanned symbols, and you want to specify an "ANY" case, all other symbols are checked before "ANY",this
+> entry will only be considered if there are no other pairs of ```{m_config,scanned symbol}``` which match the current ```Configuration``` of the machine.<br>
+> These two special symbols are not case-sensitive.
+
+##### Actions:
+
+- There are four valid actions: P(Print), R(Move tape head right), L(Move Tape head left), E(Erase current symbol).
+- An example of a valid Actions String is: ```P1,R,R,E``` ->Print 1, Move Right,Move Right, Erase symbol at head pointer.
+- Actions are case-sensitive. 
+ 
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/71e9ec03-6ae3-4f96-a1c8-3811e530d97b)
+
+### Tape-Screen:
+
+- The Tape here represents the tape of the turing machine constructed in the previous screen.
+- This page is meant for controlling and observing how the turing-machine progresses and does not have features to edit the configuration of the machine.
+- Progress the turing machine by clicking the Floating Action play button in the bottom right region.
+- You can hard-reset the tape by clicking on the restart icon-button in the top-left region: This will erase all symbols on the tape, and reset the pointer to 0, even changing the
+  m-config to the initial m-config specified in the previous screen.
+- You can navigated between the Tape and Table Screen via the back button- any changes you make to the machine in The Table Screen will apply when you navigate back to the Tape 
+  Screen. Navigating back and forth between these two screens **will not** reset the tape, unless you explicitly reset the tape or the entire machine itself via the associated Icon 
+  Buttons.
+
+  For any issues with the project, please either open an issue or contact me via e-mail: javakingxi@gmail.com
+
+## Special Mentions:
+
+- [Chandrama Saha](https://linktr.ee/chandramasaha): While Chandrama has not helped with the technical aspects of the project, she has supported me through my journey as a developer 
+  and motivated me to keep learning, buidling and breaking software. She has also worked on the final version of the improved UI(not implemented yet). Most projects I build with 
+  flutter implement her fantastic designs. 
+- [Anshul](https://github.com/ArchUsr64): Anshul helped me debug my "ANY" symbol and has helped me improve the efficiency of the application on multiple occasions. He has provided me
+  with the support and kind words required to see my work through on multiple occasions. 
+
+  
 
  
 
