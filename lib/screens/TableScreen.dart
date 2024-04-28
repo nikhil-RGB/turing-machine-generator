@@ -21,6 +21,7 @@ class TableScreen extends StatefulWidget {
 class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _input = TextEditingController();
 
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
@@ -163,6 +164,8 @@ class _TableScreenState extends State<TableScreen> {
                 deleteDropDown(),
                 const Gap(20),
                 selectInitialConfigDropDown(),
+                const Gap(20),
+                buildStringInput(platform),
                 const Gap(70),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -189,7 +192,7 @@ class _TableScreenState extends State<TableScreen> {
                   child: const Padding(
                     padding: EdgeInsets.all(15.0),
                     child: Text(
-                      "Create Machine",
+                      "Create/Resume Machine",
                       style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.w600,
@@ -517,5 +520,55 @@ class _TableScreenState extends State<TableScreen> {
         ),
       ),
     );
+  }
+
+  //Builds a text field which inputs a String for the turing machine simulator to parse.
+  Widget buildStringInput(Targets platform) {
+    return (platform != Targets.ANDROID)
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text("Initialize Tape with String(Optional): "),
+              const Gap(10),
+              SizedBox(
+                width: 250,
+                child: TextField(
+                  controller: _input,
+                ),
+              ),
+              const Gap(10.0),
+              ElevatedButton(
+                  onPressed: () {
+                    printOntoTape();
+                  },
+                  child: Text("Print onto Tape")),
+            ],
+          )
+        : Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const Text("Tape String(Optional): "),
+              const Gap(8.0),
+              SizedBox(
+                width: 140,
+                child: TextField(
+                  controller: _input,
+                ),
+              ),
+              const Gap(9.5),
+              ElevatedButton(
+                  onPressed: () {
+                    printOntoTape();
+                  },
+                  child: Text("Print onto Tape")),
+            ],
+          );
+  }
+
+  //Fills the initialization string onto the tape.
+  void printOntoTape() {
+    widget.machine.tape.resetTo(input: _input.text, pointer: 0);
   }
 }

@@ -3,6 +3,20 @@ import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Actions.dart';
 
 class Tape {
+  //Initialize a Tape with a character String, and optionally, a head pointer.
+  Tape({required this.tape, this.pointer = 0});
+  //factory constructor to create custom tape for grammar parsing
+  factory Tape.fromString({required String input}) {
+    List<String> list = input.split('').map((charac) {
+      if (charac == " ") {
+        return "";
+      }
+      return charac;
+    }).toList();
+    return Tape(tape: list);
+    //TO-DO
+  }
+
   List<String> tape = ["", "", "", "", "", "", "", "", "", ""];
   int pointer = 0;
   //getter function for current symbol being scanned
@@ -61,5 +75,16 @@ class Tape {
   void reset() {
     pointer = 0;
     tape = defaultTape();
+  }
+
+  //Reset data associated with Tape instead of constructing a new object
+  void resetTo({required String input, required int pointer}) {
+    this.pointer = pointer;
+    tape = input.split('').map((charac) {
+      if (charac == " ") {
+        return "";
+      }
+      return charac;
+    }).toList();
   }
 }

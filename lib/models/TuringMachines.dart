@@ -14,9 +14,7 @@ class TuringMachine {
   int iterations = 0;
   String initial_config;
   String current_config;
-  //TO-DO: Remove unnecessary fields
-  // final List<Behaviour> behaviours;
-  // final List<Configuration> configurations;
+
   final Tape tape;
   late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
