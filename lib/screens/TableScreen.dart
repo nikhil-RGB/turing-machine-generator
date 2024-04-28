@@ -85,6 +85,7 @@ class _TableScreenState extends State<TableScreen> {
             IconButton(
                 onPressed: () {
                   setState(() {
+                    _input.clear();
                     initialConfigValue = "NONE";
                     deleteValue = "NONE";
                     for (TextEditingController contr in _controllers) {
