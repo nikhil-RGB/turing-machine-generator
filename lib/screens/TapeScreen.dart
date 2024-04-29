@@ -2,9 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
+import 'package:turing_machines/main.dart';
+import 'package:turing_machines/models/Configuration.dart';
+import 'package:turing_machines/models/Targets.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/widgets/TapeWidget.dart';
 import 'package:gap/gap.dart';
+import 'package:turing_machines/models/Actions.dart' as actions1;
 
 class TapeScreen extends StatefulWidget {
   bool _followHead = true;
@@ -17,8 +21,14 @@ class TapeScreen extends StatefulWidget {
 
 class _TapeScreenState extends State<TapeScreen> {
   final ScrollController _sc = ScrollController();
+  final ScrollController _tableScroll = ScrollController();
   @override
   Widget build(BuildContext context) {
+    Targets platform = target;
+    Size size = MediaQuery.of(context).size;
+    if (size.width <= 480 && (platform == Targets.WEB)) {
+      platform = Targets.ANDROID;
+    }
     return SafeArea(
         child: Scaffold(
       appBar: AppBar(title: const Text("Tape Screen"), actions: <Widget>[
@@ -37,7 +47,11 @@ class _TapeScreenState extends State<TapeScreen> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
+        //MainAxisAlignment should be start for smaller screens,
+        //smaller screens should also increase gap between table and tape.
         children: [
+          buildTable(platform: platform),
+          Gap((platform == Targets.ANDROID) ? 45 : 22),
           //Padding on the left and right of the tape widget prevents the tape from touching the ends of the window
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -146,5 +160,79 @@ class _TapeScreenState extends State<TapeScreen> {
       return "NONE";
     }
     return symbol;
+  }
+
+  //Build sample table
+  Widget buildTable({required Targets platform}) {
+    return Scrollbar(
+      thumbVisibility: true,
+      trackVisibility: true,
+      controller: _tableScroll,
+      child: SizedBox(
+        height: (platform == Targets.ANDROID) ? 200 : 400,
+        child: SingleChildScrollView(
+          controller: _tableScroll,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4.0),
+            child: DataTable(
+              columnSpacing: (platform == Targets.ANDROID) ? 18 : 56,
+              decoration: const BoxDecoration(
+                color: Colors.blue, // Set the background color here
+              ),
+              columns: const <DataColumn>[
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'M-config',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Symbol',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'Actions',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+                DataColumn(
+                  label: Expanded(
+                    child: Text(
+                      'New m-config',
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ),
+                ),
+              ],
+              rows: buildEntries(),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Builds rows for tables
+  List<DataRow> buildEntries() {
+    List<DataRow> dataRows = <DataRow>[];
+    widget.machine.machine.forEach((config, behaviour) {
+      List<DataCell> dataCells = <DataCell>[];
+      dataCells.add(DataCell(Text(config.m_config)));
+      dataCells.add(DataCell(Text(parseSymbolOutput(config.symbol))));
+      dataCells.add(DataCell(
+          Text(actions1.Actions.printableListFrom(behaviour.actions))));
+      dataCells.add(DataCell(Text(behaviour.f_config)));
+      dataRows.add(DataRow(cells: dataCells));
+    });
+    return dataRows;
   }
 }
