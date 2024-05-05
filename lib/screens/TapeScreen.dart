@@ -223,16 +223,57 @@ class _TapeScreenState extends State<TapeScreen> {
 
   // Builds rows for tables
   List<DataRow> buildEntries() {
+    int green_index = findMatch(Configuration(
+        m_config: widget.machine.current_config,
+        symbol: widget.machine.tape.tape[widget.machine.tape.pointer]));
+    int index = 0;
     List<DataRow> dataRows = <DataRow>[];
     widget.machine.machine.forEach((config, behaviour) {
+      bool green = (green_index == index);
       List<DataCell> dataCells = <DataCell>[];
-      dataCells.add(DataCell(Text(config.m_config)));
-      dataCells.add(DataCell(Text(parseSymbolOutput(config.symbol))));
-      dataCells.add(DataCell(
-          Text(actions1.Actions.printableListFrom(behaviour.actions))));
-      dataCells.add(DataCell(Text(behaviour.f_config)));
-      dataRows.add(DataRow(cells: dataCells));
+      dataCells.add(DataCell(Text(
+        config.m_config,
+      )));
+      dataCells.add(DataCell(Text(
+        parseSymbolOutput(config.symbol),
+      )));
+      dataCells.add(DataCell(Text(
+        actions1.Actions.printableListFrom(behaviour.actions),
+      )));
+      dataCells.add(DataCell(Text(
+        behaviour.f_config,
+      )));
+      dataRows.add(DataRow(
+          cells: dataCells,
+          color:
+              MaterialStateProperty.all(green ? Colors.green : Colors.blue)));
+      ++index;
     });
     return dataRows;
+  }
+
+  //This function finds the index of the config matching the parameter, preferring
+  //a specefic symbol over the "any" symbol
+  //IMP: Handle case where return result is -1(No match-machine will halt on next operation).
+  int findMatch(Configuration configuration) {
+    int index = 0;
+    List<int> configs = [];
+    widget.machine.machine.forEach((config, behaviour) {
+      if (config == configuration) {
+        configs.add(index);
+      }
+      ++index;
+    });
+    if (configs.length == 1) {
+      return configs[0];
+    }
+    List<Configuration> keys = widget.machine.machine.keys.toList();
+    for (int i = 0; i < configs.length; i++) {
+      Configuration current = keys[configs[i]];
+      if (current.symbol.toLowerCase() != "any") {
+        return configs[i];
+      }
+    }
+    return -1;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+// import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
@@ -7,9 +8,14 @@ import 'package:turing_machines/testing.dart';
 import 'package:turing_machines/models/Targets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
+// import 'package:hive/hive.dart';
 
 Targets target = MyApp.detectPlatform();
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // await Hive.initFlutter();
+  // await Hive.openBox("turing_machines");
+
   runApp(const MyApp());
 }
 
@@ -20,7 +26,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     TuringMachine machine = Testing.main();
-    //for debugginh
+    //for debugging
     Logger().i(target.name);
     return MaterialApp(
       title: 'Turing Machine Generator',
