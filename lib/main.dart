@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:logger/logger.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
+import 'package:turing_machines/screens/WelcomeScreen.dart';
 import 'package:turing_machines/testing.dart';
 import 'package:turing_machines/models/Targets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -25,8 +26,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    TuringMachine machine = Testing.main();
-    //for debugging
+    //Helpful for debugging/testing.
     Logger().i(target.name);
     return MaterialApp(
       title: 'Turing Machine Generator',
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         textTheme: GoogleFonts.sourceCodeProTextTheme(),
       ),
-      home: TableScreen(machine: machine),
+      home: const WelcomeScreen(),
     );
   }
 

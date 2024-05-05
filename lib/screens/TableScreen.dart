@@ -195,9 +195,10 @@ class _TableScreenState extends State<TableScreen> {
                     child: Text(
                       "Create/Resume Machine",
                       style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -543,7 +544,7 @@ class _TableScreenState extends State<TableScreen> {
                   onPressed: () {
                     printOntoTape();
                   },
-                  child: Text("Print onto Tape")),
+                  child: const Text("Print onto Tape")),
             ],
           )
         : Column(
