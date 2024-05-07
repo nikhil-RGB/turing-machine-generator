@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-// import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
+import 'package:turing_machines/models/Tape.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
 import 'package:turing_machines/screens/WelcomeScreen.dart';
@@ -9,13 +10,15 @@ import 'package:turing_machines/testing.dart';
 import 'package:turing_machines/models/Targets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
-// import 'package:hive/hive.dart';
+import 'package:hive/hive.dart';
 
 Targets target = MyApp.detectPlatform();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await Hive.initFlutter();
-  // await Hive.openBox("turing_machines");
+  await Hive.initFlutter();
+  Hive.registerAdapter(TapeAdapter());
+  Hive.registerAdapter(TuringMachineAdapter());
+  await Hive.openBox<TuringMachine>("turing_machines");
 
   runApp(const MyApp());
 }

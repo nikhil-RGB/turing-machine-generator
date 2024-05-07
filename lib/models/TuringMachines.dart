@@ -4,18 +4,26 @@
 // ignore_for_file: non_constant_identifier_names
 
 import 'dart:collection';
+import 'package:hive/hive.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
 
-//An object of this class represents a hypothetical turing machine, complete with a tape, m-configs, scanned symbols,Actions adn a final m-config post-action execution
-class TuringMachine {
-  int iterations = 0;
-  String initial_config;
-  String current_config;
+part 'TuringMachines.g.dart';
 
+//An object of this class represents a hypothetical turing machine, complete with a tape, m-configs, scanned symbols,Actions adn a final m-config post-action execution
+@HiveType(typeId: 0)
+class TuringMachine {
+  @HiveField(0)
+  int iterations = 0;
+  @HiveField(1)
+  String initial_config;
+  @HiveField(2)
+  String current_config;
+  @HiveField(3)
   final Tape tape;
+  @HiveField(4)
   late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
       {required this.tape, required this.initial_config})

@@ -11,6 +11,7 @@ import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/models/Actions.dart' as actions;
 import 'package:turing_machines/screens/TapeScreen.dart';
 
+//Add save icon button here to interact with Hive No-SQL database.
 class TableScreen extends StatefulWidget {
   const TableScreen({super.key, required this.machine});
   final TuringMachine machine;
@@ -22,6 +23,7 @@ class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _input = TextEditingController();
+  final TextEditingController _saveName = TextEditingController();
 
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
@@ -82,6 +84,12 @@ class _TableScreenState extends State<TableScreen> {
         appBar: AppBar(
           title: const Text("TableScreen"),
           actions: [
+            IconButton(
+                onPressed: () {
+                  _showInputSheet(context);
+                },
+                icon: const Icon(Icons.save_as_outlined)),
+            const Gap(5),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -572,5 +580,62 @@ class _TableScreenState extends State<TableScreen> {
   //Fills the initialization string onto the tape.
   void printOntoTape() {
     widget.machine.tape.resetTo(input: _input.text, pointer: 0);
+  }
+
+  //Bottom modal sheet function here
+  void _showInputSheet(
+    BuildContext context,
+  ) {
+    showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: false,
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (context) {
+          return Container(
+            // height:200,
+            padding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+                top: 15,
+                left: 15,
+                right: 15),
+
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text("Turing Machine name: "),
+                  const Gap(15),
+                  TextField(
+                    controller: _saveName,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text("Cancel"),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            //saving code here
+                            Navigator.pop(context);
+                          },
+                          child: Text("Save"),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
