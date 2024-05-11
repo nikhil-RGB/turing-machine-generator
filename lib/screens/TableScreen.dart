@@ -3,10 +3,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
+import 'package:hive/hive.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Targets.dart';
+import 'package:turing_machines/models/TuringMachineModel.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/models/Actions.dart' as actions;
 import 'package:turing_machines/screens/TapeScreen.dart';
@@ -24,7 +26,7 @@ class _TableScreenState extends State<TableScreen> {
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _input = TextEditingController();
   final TextEditingController _saveName = TextEditingController();
-
+  late Box<TuringMachineModel> _machinesBox;
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
     TextEditingController(),
@@ -72,6 +74,13 @@ class _TableScreenState extends State<TableScreen> {
       return null;
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _machinesBox = Hive.box<TuringMachineModel>("turing_machines");
+  }
+
   @override
   Widget build(BuildContext context) {
     Targets platform = target;
@@ -594,13 +603,12 @@ class _TableScreenState extends State<TableScreen> {
         enableDrag: false,
         builder: (context) {
           return Container(
-            // height:200,
+            height: 200,
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom,
                 top: 15,
                 left: 15,
                 right: 15),
-
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -611,23 +619,31 @@ class _TableScreenState extends State<TableScreen> {
                   TextField(
                     controller: _saveName,
                   ),
+                  const Gap(15),
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
                     child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         ElevatedButton(
                           onPressed: () {
                             Navigator.pop(context);
                           },
-                          child: Text("Cancel"),
+                          child: const Text("Cancel"),
                         ),
+                        const Gap(7.0),
                         ElevatedButton(
                           onPressed: () {
                             //saving code here
+                            _machinesBox.put(
+                                _saveName.text,
+                                TuringMachineModel.fromMachine(
+                                    machine: widget.machine));
+                            //Notification for save
                             Navigator.pop(context);
                           },
-                          child: Text("Save"),
+                          child: const Text("Save"),
                         )
                       ],
                     ),

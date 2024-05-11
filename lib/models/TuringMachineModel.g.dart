@@ -1,34 +1,35 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'TuringMachines.dart';
+part of 'TuringMachineModel.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class TuringMachineAdapter extends TypeAdapter<TuringMachine> {
+class TuringMachineModelAdapter extends TypeAdapter<TuringMachineModel> {
   @override
   final int typeId = 0;
 
   @override
-  TuringMachine read(BinaryReader reader) {
+  TuringMachineModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return TuringMachine(
-      tape: fields[3] as Tape,
+    return TuringMachineModel(
+      iterations: fields[0] as int,
       initial_config: fields[1] as String,
-    )
-      ..iterations = fields[0] as int
-      ..current_config = fields[2] as String
-      ..machine = (fields[4] as Map).cast<Configuration, Behaviour>();
+      current_config: fields[2] as String,
+      tape: fields[3] as Tape,
+      configs: (fields[4] as List).cast<Configuration>(),
+      behaviours: (fields[5] as List).cast<Behaviour>(),
+    );
   }
 
   @override
-  void write(BinaryWriter writer, TuringMachine obj) {
+  void write(BinaryWriter writer, TuringMachineModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.iterations)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class TuringMachineAdapter extends TypeAdapter<TuringMachine> {
       ..writeByte(3)
       ..write(obj.tape)
       ..writeByte(4)
-      ..write(obj.machine);
+      ..write(obj.configs)
+      ..writeByte(5)
+      ..write(obj.behaviours);
   }
 
   @override
@@ -47,7 +50,7 @@ class TuringMachineAdapter extends TypeAdapter<TuringMachine> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is TuringMachineAdapter &&
+      other is TuringMachineModelAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

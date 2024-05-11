@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Targets.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
+import 'package:turing_machines/screens/LoadMachineScreen.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
 import 'package:turing_machines/testing.dart';
 
@@ -75,11 +76,10 @@ class WelcomeScreen extends StatelessWidget {
             ElevatedButton(
                 style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Feature Mot Implemented yet!'),
-                    ),
-                  );
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (context) {
+                    return LoadMachineScreen();
+                  }));
                 },
                 child: const Padding(
                   padding: EdgeInsets.all(17.0),

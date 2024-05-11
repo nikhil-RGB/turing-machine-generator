@@ -1,8 +1,14 @@
+// ignore_for_file: unused_import
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:logger/logger.dart';
+import 'package:turing_machines/models/Actions.dart';
+import 'package:turing_machines/models/Behaviour.dart';
+import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
+import 'package:turing_machines/models/TuringMachineModel.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
 import 'package:turing_machines/screens/WelcomeScreen.dart';
@@ -17,8 +23,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TapeAdapter());
-  Hive.registerAdapter(TuringMachineAdapter());
-  await Hive.openBox<TuringMachine>("turing_machines");
+  Hive.registerAdapter(BehaviourAdapter());
+  Hive.registerAdapter(ConfigurationAdapter());
+  Hive.registerAdapter(ActionsAdapter());
+  Hive.registerAdapter(ActionTypeAdapter());
+  Hive.registerAdapter(TuringMachineModelAdapter());
+  await Hive.openBox<TuringMachineModel>("turing_machines");
 
   runApp(const MyApp());
 }
