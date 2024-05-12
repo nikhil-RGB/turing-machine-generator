@@ -48,3 +48,4 @@ app.*.map.json
 .firebase/
 #information
 data.txt
+notes.txt

@@ -83,6 +83,10 @@ class Tape {
 
   //Reset data associated with Tape instead of constructing a new object
   void resetTo({required String input, required int pointer}) {
+    if (input.isEmpty) {
+      reset();
+      return;
+    }
     this.pointer = pointer;
     tape = input.split('').map((charac) {
       if (charac == " ") {
@@ -90,5 +94,19 @@ class Tape {
       }
       return charac;
     }).toList();
+  }
+
+  @override
+  String toString() {
+    String output = "";
+    for (String element in tape) {
+      output += element;
+    }
+    return output;
+  }
+
+  //Clones the tape for saving purposes.
+  Tape cloneTape() {
+    return Tape(tape: tape.map((e) => e).toList(), pointer: pointer);
   }
 }

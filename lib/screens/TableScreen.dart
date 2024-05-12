@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
@@ -79,6 +80,11 @@ class _TableScreenState extends State<TableScreen> {
   void initState() {
     super.initState();
     _machinesBox = Hive.box<TuringMachineModel>("turing_machines");
+    if (widget.machine.initial_config.isNotEmpty) {
+      initialConfigValue = widget.machine.initial_config;
+    }
+    Logger().w("The initial Config is: $initialConfigValue");
+    _input.text = widget.machine.tape.toString();
   }
 
   @override
@@ -636,6 +642,8 @@ class _TableScreenState extends State<TableScreen> {
                         ElevatedButton(
                           onPressed: () {
                             //saving code here
+                            widget.machine.tape =
+                                widget.machine.tape.cloneTape();
                             _machinesBox.put(
                                 _saveName.text,
                                 TuringMachineModel.fromMachine(

@@ -17,7 +17,7 @@ class TuringMachine {
 
   String current_config;
 
-  final Tape tape;
+  Tape tape;
 
   late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
