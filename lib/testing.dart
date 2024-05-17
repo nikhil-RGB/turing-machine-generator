@@ -4,8 +4,8 @@ import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 
-class Testing {
-  static TuringMachine _continuousZeroPrint() {
+class StandardMachines {
+  static TuringMachine defaultMachine() {
     //Create and test turing machine to print 0 continuously
     List<Configuration> configurations = [
       Configuration(m_config: "B", symbol: ""),
@@ -23,13 +23,11 @@ class Testing {
     return machine;
   }
 
-  static TuringMachine main() {
-    TuringMachine machine = _continuousZeroPrint();
-    // machine.tape.printTape();
-    // for (int i = 0; i < 10; i++) {
-    //   machine.stepIntoConfig();
-    //   machine.tape.printTape();
-    // }
+  static TuringMachine emptyMachine() {
+    List<Configuration> configurations = [];
+    List<Behaviour> behaviours = [];
+    TuringMachine machine = TuringMachine(configurations, behaviours,
+        tape: Tape(tape: Tape.defaultTape()), initial_config: "");
     return machine;
   }
 }

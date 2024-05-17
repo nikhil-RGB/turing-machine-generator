@@ -12,10 +12,13 @@ import 'package:turing_machines/models/Tape.dart';
 //An object of this class represents a hypothetical turing machine, complete with a tape, m-configs, scanned symbols,Actions adn a final m-config post-action execution
 class TuringMachine {
   int iterations = 0;
+
   String initial_config;
+
   String current_config;
 
-  final Tape tape;
+  Tape tape;
+
   late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
       {required this.tape, required this.initial_config})

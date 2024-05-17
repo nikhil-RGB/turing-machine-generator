@@ -1,3 +1,8 @@
+import 'package:hive_flutter/adapters.dart';
+
+part 'Configuration.g.dart';
+
+@HiveType(typeId: 2)
 class Configuration {
   const Configuration({required this.m_config, required this.symbol});
   //Build a Configuration object by parsing a given String containing the
@@ -9,7 +14,9 @@ class Configuration {
     return Configuration(
         m_config: components[0], symbol: parseSymbolInput(components[1]));
   }
+  @HiveField(0)
   final String m_config;
+  @HiveField(1)
   final String symbol;
   @override
   bool operator ==(Object other) =>

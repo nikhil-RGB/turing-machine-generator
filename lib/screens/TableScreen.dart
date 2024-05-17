@@ -3,14 +3,18 @@
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
+import 'package:hive/hive.dart';
+import 'package:logger/logger.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Targets.dart';
+import 'package:turing_machines/models/TuringMachineModel.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/models/Actions.dart' as actions;
 import 'package:turing_machines/screens/TapeScreen.dart';
 
+//Add save icon button here to interact with Hive No-SQL database.
 class TableScreen extends StatefulWidget {
   const TableScreen({super.key, required this.machine});
   final TuringMachine machine;
@@ -22,7 +26,8 @@ class _TableScreenState extends State<TableScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final ScrollController _scrollController = ScrollController();
   final TextEditingController _input = TextEditingController();
-
+  final TextEditingController _saveName = TextEditingController();
+  late Box<TuringMachineModel> _machinesBox;
   //0->m-config,1->Scanned Symbol,2->Actions,3->f-configs
   final List<TextEditingController> _controllers = [
     TextEditingController(),
@@ -70,6 +75,18 @@ class _TableScreenState extends State<TableScreen> {
       return null;
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _machinesBox = Hive.box<TuringMachineModel>("turing_machines");
+    if (widget.machine.initial_config.isNotEmpty) {
+      initialConfigValue = widget.machine.initial_config;
+    }
+    Logger().w("The initial Config is: $initialConfigValue");
+    _input.text = widget.machine.tape.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     Targets platform = target;
@@ -82,6 +99,12 @@ class _TableScreenState extends State<TableScreen> {
         appBar: AppBar(
           title: const Text("TableScreen"),
           actions: [
+            IconButton(
+                onPressed: () {
+                  _showInputSheet(context);
+                },
+                icon: const Icon(Icons.save_as_outlined)),
+            const Gap(5),
             IconButton(
                 onPressed: () {
                   setState(() {
@@ -195,9 +218,10 @@ class _TableScreenState extends State<TableScreen> {
                     child: Text(
                       "Create/Resume Machine",
                       style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
+                        fontSize: 22,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                 ),
@@ -543,7 +567,7 @@ class _TableScreenState extends State<TableScreen> {
                   onPressed: () {
                     printOntoTape();
                   },
-                  child: Text("Print onto Tape")),
+                  child: const Text("Print onto Tape")),
             ],
           )
         : Column(
@@ -571,5 +595,73 @@ class _TableScreenState extends State<TableScreen> {
   //Fills the initialization string onto the tape.
   void printOntoTape() {
     widget.machine.tape.resetTo(input: _input.text, pointer: 0);
+  }
+
+  //Bottom modal sheet function here
+  void _showInputSheet(
+    BuildContext context,
+  ) {
+    showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              height: 200,
+              padding: const EdgeInsets.only(
+                  bottom: 8.0, top: 15, left: 15, right: 15),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Turing Machine name: "),
+                    const Gap(15),
+                    TextField(
+                      controller: _saveName,
+                    ),
+                    const Gap(15),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          const Gap(7.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              //saving code here
+                              widget.machine.tape =
+                                  widget.machine.tape.cloneTape();
+                              _machinesBox.put(
+                                  _saveName.text,
+                                  TuringMachineModel.fromMachine(
+                                      machine: widget.machine));
+                              //Notification for save
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Save"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

@@ -1,10 +1,16 @@
 // ignore: file_names
 
+import 'package:hive_flutter/adapters.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 
 //Represents an Action which can be performed on the tape of a turing machine.
+part 'Actions.g.dart';
+
+@HiveType(typeId: 4)
 class Actions {
+  @HiveField(0)
   String symbol;
+  @HiveField(1)
   ActionType type;
   Actions({required this.type, this.symbol = ""});
   //Parses a String containing actions, seperated by a ,(comma)
@@ -59,11 +65,17 @@ class Actions {
   int get hashCode => symbol.hashCode ^ type.hashCode;
 }
 
+@HiveType(typeId: 5)
 enum ActionType {
+  @HiveField(0)
   P,
+  @HiveField(1)
   R,
+  @HiveField(2)
   L,
+  @HiveField(3)
   E,
   // ignore: constant_identifier_names
+  @HiveField(4)
   NONE;
 }
