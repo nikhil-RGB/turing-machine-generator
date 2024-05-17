@@ -603,60 +603,62 @@ class _TableScreenState extends State<TableScreen> {
   ) {
     showModalBottomSheet(
         useSafeArea: true,
-        isScrollControlled: false,
+        isScrollControlled: true,
         context: context,
         isDismissible: false,
         enableDrag: false,
         builder: (context) {
-          return Container(
-            height: 200,
+          return Padding(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom,
-                top: 15,
-                left: 15,
-                right: 15),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text("Turing Machine name: "),
-                  const Gap(15),
-                  TextField(
-                    controller: _saveName,
-                  ),
-                  const Gap(15),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Cancel"),
-                        ),
-                        const Gap(7.0),
-                        ElevatedButton(
-                          onPressed: () {
-                            //saving code here
-                            widget.machine.tape =
-                                widget.machine.tape.cloneTape();
-                            _machinesBox.put(
-                                _saveName.text,
-                                TuringMachineModel.fromMachine(
-                                    machine: widget.machine));
-                            //Notification for save
-                            Navigator.pop(context);
-                          },
-                          child: const Text("Save"),
-                        )
-                      ],
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              height: 200,
+              padding: const EdgeInsets.only(
+                  bottom: 8.0, top: 15, left: 15, right: 15),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text("Turing Machine name: "),
+                    const Gap(15),
+                    TextField(
+                      controller: _saveName,
                     ),
-                  ),
-                ],
+                    const Gap(15),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          const Gap(7.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              //saving code here
+                              widget.machine.tape =
+                                  widget.machine.tape.cloneTape();
+                              _machinesBox.put(
+                                  _saveName.text,
+                                  TuringMachineModel.fromMachine(
+                                      machine: widget.machine));
+                              //Notification for save
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Save"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

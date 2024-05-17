@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:turing_machines/main.dart';
+import 'package:turing_machines/models/Targets.dart';
 import 'package:turing_machines/models/TuringMachineModel.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
 
@@ -12,6 +14,11 @@ class LoadMachineScreen extends StatefulWidget {
 class _LoadMachineScreenState extends State<LoadMachineScreen> {
   @override
   Widget build(BuildContext context) {
+    Targets platform = target;
+    Size size = MediaQuery.of(context).size;
+    if (size.width <= 480 && (platform == Targets.WEB)) {
+      platform = Targets.ANDROID;
+    }
     Box machineBox = Hive.box<TuringMachineModel>("turing_machines");
     List<dynamic> names = machineBox.keys.toList();
     return SafeArea(
@@ -35,7 +42,7 @@ class _LoadMachineScreenState extends State<LoadMachineScreen> {
                   itemCount: names.length,
                   itemBuilder: (context, index) {
                     return createTile(
-                        context, names[index] as String, machineBox);
+                        context, names[index] as String, machineBox, platform);
                   }),
         ),
       ),
@@ -94,12 +101,17 @@ class _LoadMachineScreenState extends State<LoadMachineScreen> {
   //   );
   // }
 
-  Widget createTile(BuildContext context, String name, Box machineBox) {
+  Widget createTile(
+      BuildContext context, String name, Box machineBox, Targets platform) {
     return Padding(
       padding: EdgeInsets.only(
         bottom: 10.0,
-        left: MediaQuery.of(context).size.width * 0.33,
-        right: MediaQuery.of(context).size.width * 0.33,
+        left: (platform == Targets.ANDROID)
+            ? MediaQuery.of(context).size.width * 0.12
+            : MediaQuery.of(context).size.width * 0.33,
+        right: (platform == Targets.ANDROID)
+            ? MediaQuery.of(context).size.width * 0.12
+            : MediaQuery.of(context).size.width * 0.33,
       ),
       child: ListTile(
         shape: RoundedRectangleBorder(

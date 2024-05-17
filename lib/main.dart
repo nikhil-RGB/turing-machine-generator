@@ -22,7 +22,7 @@ Targets target = MyApp.detectPlatform();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  Hive.registerAdapter(TapeAdapter());
+
   Hive.registerAdapter(BehaviourAdapter());
   Hive.registerAdapter(ConfigurationAdapter());
   Hive.registerAdapter(ActionsAdapter());

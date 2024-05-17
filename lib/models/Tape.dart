@@ -1,10 +1,7 @@
-import 'package:hive/hive.dart';
 import 'package:logger/logger.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Actions.dart';
-part 'Tape.g.dart';
 
-@HiveType(typeId: 1)
 class Tape {
   //Initialize a Tape with a character String, and optionally, a head pointer.
   Tape({required this.tape, this.pointer = 0});
@@ -19,9 +16,7 @@ class Tape {
     return Tape(tape: list);
     //TO-DO
   }
-  @HiveField(0)
   List<String> tape = ["", "", "", "", "", "", "", "", "", ""];
-  @HiveField(1)
   int pointer = 0;
   //getter function for current symbol being scanned
   String get symbol => tape[pointer];
