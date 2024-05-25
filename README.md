@@ -95,6 +95,8 @@ It comprises of:
 ## Purpose:
 
 This project aims to create a windows desktop application,mobile app and web-app built with flutter which allow users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
+This application is useful to simulate and store Turing Machines encountered in Alan Turing's 1936 reserach paper as it is easier to understand the machines and follow along with this application rather than if you simulated them manually. 
+To save machines, a secure NoSQL database, [Hive](https://pub.dev/packages/hive) was used.
 The logic for the project is available in the lib/models/ folder. You can find the apk/exe file in the [releases](https://github.com/nikhil-RGB/turing-machine-generator/releases)
 section. There is also a [web deployment](https://turing-machines-14433.web.app)
 
@@ -104,13 +106,48 @@ section. There is also a [web deployment](https://turing-machines-14433.web.app)
 > The project overall, and especially the UI is under development and subject to constant improvement and modification, the following screenshots
 > are representative only of the current state of the application.
 
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/bafbc936-868c-4a6b-af9f-560ce8c2189c)
+
+<br>
+
+### Welcome Screen:
+
+- This screen presents the user with the option to create a machine from scratch, create a default machine, or load a saved machine.
+- The default machine looks like this:
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/966c6ee9-9fb3-4dba-a503-d1e9aa36e5bc)
+
+
+and simply populates the tape with 0's.
+- Selecting the "Create Machine" or "Default Machine" option will send the user to the Table Screen with a blank table or the default table respectively.
+- Selecting the "Load Machine" option will navigate the application to the Load Machine Screen.
+<br>
+
+
+
+ ![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/dac91f15-73ef-430b-8b38-a70c83eed09e)
+
+<br>
+
+ ### Load Machine Screen:
+- Pick one machine from the list of saved machines and click it to proceed. The machine will be loaded and presented on the Table Screen.
+- You can delete a saved machine by clicking on the delete icon in the machine's name tile.
+- The reset icon in the top right will delete ALL saved machines. 
+<br>
+
 ![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/90685148-5d69-4e41-afa8-0b40b56077f1)
 
 <br>
 
 #### Table Screen:
 
-
+> [!NOTE]  
+> You can save a machine by clicking on the save icon in the top-right.
+> You will get a prompt asking for a name with which the machine can be saved, an empty string is also a valid input.
+> Ensure that the name is not already taken before saving since if there is another machine saved with the same name, it will simply get overwritten with the one being saved.
+> Note also that only the machine table and initial configuration are saved. The machine's state on running it through X iterations will not be saved.
 
 - The Table on this screen represents the Turing Machine's behaviour. It consists of the following columns: M-config, Symbol, Actions, New m-config.
 - Each entry in this table, therefore can be read as: While the machine is in [M-config] and the tape-head is reading symbol [Symbol], execute [Actions] and switch into [New m- 
@@ -161,7 +198,8 @@ section. There is also a [web deployment](https://turing-machines-14433.web.app)
   and motivated me to keep learning, buidling and breaking software. She has also worked on the final version of the improved UI(not implemented yet). Most projects I build with 
   flutter implement her fantastic designs. 
 - [Anshul](https://github.com/ArchUsr64): Anshul helped me debug my "ANY" symbol and has helped me improve the efficiency of the application on multiple occasions. He has provided me
-  with the support and kind words required to see my work through on multiple occasions. 
+  with the support and kind words required to see my work through on multiple occasions.
+  Anshul has also acted as an external tester for this project.
 
   
 
