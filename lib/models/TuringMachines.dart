@@ -61,6 +61,7 @@ class TuringMachine {
     machine.clear();
     iterations = 0; //Reset iteration counter
     tape.reset(); //hard-reset the tape of the turing machine
+    initial_config = "NONE";
     current_config = initial_config; //set back to initial configuration
   }
 
