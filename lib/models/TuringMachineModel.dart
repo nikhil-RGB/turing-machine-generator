@@ -1,5 +1,5 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:logger/logger.dart';
+
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
@@ -40,8 +40,6 @@ class TuringMachineModel {
     );
     machine.current_config = initial_config;
     machine.iterations = 0;
-    Logger().i(
-        "Current config of machine read from memory: ${machine.current_config}");
 
     return machine;
   }
