@@ -192,6 +192,24 @@ and simply populates the tape with 0's.
 
   For any issues with the project, please either open an issue or contact me via e-mail: javakingxi@gmail.com
 
+## Importing and Exporting Machines:
+
+ - Turing Machines can be imported and exported as encoded JSON strings, which allows users to share machines across devices.
+ - To share a machine you created, first click the 'share' icon button on the top right corner of the 'Table Screen', this will show an encoded JSON string representation of the 
+   machine. Copy this string to your clipboard.
+ - To import a machine, click on the 'import/export' icon button on the top-right corner of the 'Load Machine' screen, and paste the machine export JSON string.
+
+   <br> <br>
+
+   <img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/c2831091-85dc-4eac-b7b8-8bcc627cf412">
+ 
+   <br> <br>
+
+   <img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/cac51409-1fa6-4654-a072-ff2bfd7d8f6e">
+
+
+   <br>
+
 ## Special Mentions:
 
 - [Chandrama Saha](https://linktr.ee/chandramasaha): While Chandrama has not helped with the technical aspects of the project, she has supported me through my journey as a developer 
