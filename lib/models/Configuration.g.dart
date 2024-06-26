@@ -42,3 +42,19 @@ class ConfigurationAdapter extends TypeAdapter<Configuration> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Configuration _$ConfigurationFromJson(Map<String, dynamic> json) =>
+    Configuration(
+      m_config: json['m_config'] as String,
+      symbol: json['symbol'] as String,
+    );
+
+Map<String, dynamic> _$ConfigurationToJson(Configuration instance) =>
+    <String, dynamic>{
+      'm_config': instance.m_config,
+      'symbol': instance.symbol,
+    };

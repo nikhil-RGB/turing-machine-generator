@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:turing_machines/models/Actions.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'Behaviour.g.dart';
 
 @HiveType(typeId: 3)
+@JsonSerializable()
 class Behaviour {
   const Behaviour({required this.actions, required this.f_config});
   @HiveField(0)
@@ -21,4 +23,12 @@ class Behaviour {
 
   @override
   int get hashCode => actions.hashCode ^ f_config.hashCode;
+
+  // Connect the generated function to the `fromJson`
+  // factory.
+  factory Behaviour.fromJson(Map<String, dynamic> json) =>
+      _$BehaviourFromJson(json);
+
+  // Connect the generated  function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$BehaviourToJson(this);
 }

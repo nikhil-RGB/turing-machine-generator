@@ -45,3 +45,25 @@ class TuringMachineModelAdapter extends TypeAdapter<TuringMachineModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+TuringMachineModel _$TuringMachineModelFromJson(Map<String, dynamic> json) =>
+    TuringMachineModel(
+      initial_config: json['initial_config'] as String,
+      configs: (json['configs'] as List<dynamic>)
+          .map((e) => Configuration.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      behaviours: (json['behaviours'] as List<dynamic>)
+          .map((e) => Behaviour.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    );
+
+Map<String, dynamic> _$TuringMachineModelToJson(TuringMachineModel instance) =>
+    <String, dynamic>{
+      'initial_config': instance.initial_config,
+      'configs': instance.configs,
+      'behaviours': instance.behaviours,
+    };
