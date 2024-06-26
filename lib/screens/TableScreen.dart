@@ -1,10 +1,11 @@
 // ignore_for_file: unused_catch_clause
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:gap/gap.dart';
 import 'package:hive/hive.dart';
-import 'package:logger/logger.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
@@ -83,7 +84,7 @@ class _TableScreenState extends State<TableScreen> {
     if (widget.machine.initial_config.isNotEmpty) {
       initialConfigValue = widget.machine.initial_config;
     }
-    Logger().w("The initial Config is: $initialConfigValue");
+
     _input.text = widget.machine.tape.toString();
   }
 
@@ -104,6 +105,13 @@ class _TableScreenState extends State<TableScreen> {
                   _showInputSheet(context);
                 },
                 icon: const Icon(Icons.save_as_outlined)),
+            const Gap(5),
+            IconButton(
+              onPressed: () {
+                _showJsonSheet();
+              },
+              icon: const Icon(Icons.share_outlined),
+            ),
             const Gap(5),
             IconButton(
                 onPressed: () {
@@ -643,8 +651,8 @@ class _TableScreenState extends State<TableScreen> {
                           ElevatedButton(
                             onPressed: () {
                               //saving code here
-                              widget.machine.tape =
-                                  widget.machine.tape.cloneTape();
+                              // widget.machine.tape =
+                              //     widget.machine.tape.cloneTape();
                               _machinesBox.put(
                                   _saveName.text,
                                   TuringMachineModel.fromMachine(
@@ -656,6 +664,48 @@ class _TableScreenState extends State<TableScreen> {
                           )
                         ],
                       ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showJsonSheet() {
+    TextEditingController controller = TextEditingController(
+        text: jsonEncode(
+            TuringMachineModel.fromMachine(machine: widget.machine).toJson()));
+
+    showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        isDismissible: true,
+        enableDrag: false,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              height: 250,
+              padding: const EdgeInsets.only(
+                  bottom: 8.0, top: 15, left: 15, right: 15),
+              child: Center(
+                child: Column(
+                  children: [
+                    const Text(
+                      "Machine Export String to Copy: ",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(20),
+                    TextField(
+                      readOnly: true,
+                      controller: controller,
+                      maxLines: 5,
                     ),
                   ],
                 ),

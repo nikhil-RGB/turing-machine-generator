@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:logger/logger.dart';
 import 'package:turing_machines/models/Actions.dart';
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
@@ -39,8 +38,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    //Helpful for debugging/testing.
-    Logger().i(target.name);
+
     return MaterialApp(
       title: 'Turing Machine Generator',
       debugShowCheckedModeBanner: false,

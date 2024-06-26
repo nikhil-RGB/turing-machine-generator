@@ -1,12 +1,14 @@
 import 'package:hive_flutter/adapters.dart';
-import 'package:logger/logger.dart';
+
 import 'package:turing_machines/models/Behaviour.dart';
 import 'package:turing_machines/models/Configuration.dart';
 import 'package:turing_machines/models/Tape.dart';
 import 'package:turing_machines/models/TuringMachines.dart';
+import 'package:json_annotation/json_annotation.dart';
 part "TuringMachineModel.g.dart";
 
 @HiveType(typeId: 0)
+@JsonSerializable()
 class TuringMachineModel {
   @HiveField(0)
   String initial_config;
@@ -38,9 +40,15 @@ class TuringMachineModel {
     );
     machine.current_config = initial_config;
     machine.iterations = 0;
-    Logger().i(
-        "Current config of machine read from memory: ${machine.current_config}");
 
     return machine;
   }
+
+  // Connect the generated function to the `fromJson`
+  // factory.
+  factory TuringMachineModel.fromJson(Map<String, dynamic> json) =>
+      _$TuringMachineModelFromJson(json);
+
+  // Connect the generated  function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$TuringMachineModelToJson(this);
 }

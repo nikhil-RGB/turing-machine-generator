@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:turing_machines/main.dart';
 import 'package:turing_machines/models/Targets.dart';
 import 'package:turing_machines/models/TuringMachineModel.dart';
+import 'package:turing_machines/models/TuringMachines.dart';
 import 'package:turing_machines/screens/TableScreen.dart';
 
 class LoadMachineScreen extends StatefulWidget {
@@ -26,6 +29,13 @@ class _LoadMachineScreenState extends State<LoadMachineScreen> {
         appBar: AppBar(
           title: const Text("Load a saved machine"),
           actions: [
+            IconButton(
+              onPressed: () {
+                _showJsonInput(context);
+              },
+              icon: const Icon(Icons.import_export_outlined),
+            ),
+            const Gap(5),
             IconButton(
                 onPressed: () async {
                   await machineBox.clear();
@@ -139,5 +149,88 @@ class _LoadMachineScreenState extends State<LoadMachineScreen> {
         },
       ),
     );
+  }
+
+  //move to table screen with the machine represented by the json string.
+  void actuateJsonMachine(String json) {
+    // ignore: non_constant_identifier_names
+    TuringMachine target_machine =
+        TuringMachineModel.fromJson(jsonDecode(json)).actuateMachine();
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) {
+      return TableScreen(machine: target_machine);
+    }));
+  }
+
+  //show input sheet for Json string
+  void _showJsonInput(BuildContext context) {
+    TextEditingController tc = TextEditingController();
+    showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        isDismissible: false,
+        enableDrag: false,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              height: 300,
+              padding: const EdgeInsets.only(
+                  bottom: 8.0, top: 15, left: 15, right: 15),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const Text(
+                        "Enter the export string to construct the turing machine: "),
+                    const Gap(15),
+                    TextField(
+                      controller: tc,
+                      maxLines: 5,
+                    ),
+                    const Gap(15),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          const Gap(7.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              //Code to actuate and navigate to machine
+                              try {
+                                Navigator.pop(context);
+                                actuateJsonMachine(tc.text);
+                                // ignore: unused_catch_clause
+                              } on FormatException catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Invalid String format!'),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
+                            child: const Text("Load machine"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

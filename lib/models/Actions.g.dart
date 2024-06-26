@@ -96,3 +96,25 @@ class ActionTypeAdapter extends TypeAdapter<ActionType> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Actions _$ActionsFromJson(Map<String, dynamic> json) => Actions(
+      type: $enumDecode(_$ActionTypeEnumMap, json['type']),
+      symbol: json['symbol'] as String? ?? "",
+    );
+
+Map<String, dynamic> _$ActionsToJson(Actions instance) => <String, dynamic>{
+      'symbol': instance.symbol,
+      'type': _$ActionTypeEnumMap[instance.type]!,
+    };
+
+const _$ActionTypeEnumMap = {
+  ActionType.P: 'P',
+  ActionType.R: 'R',
+  ActionType.L: 'L',
+  ActionType.E: 'E',
+  ActionType.NONE: 'NONE',
+};

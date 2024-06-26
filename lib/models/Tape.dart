@@ -1,4 +1,3 @@
-import 'package:logger/logger.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
 import 'package:turing_machines/models/Actions.dart';
 
@@ -61,8 +60,7 @@ class Tape {
       }
       s += symbol + " ";
     }
-    Logger().i("Cursor at $pointer");
-    Logger().i(s);
+    print(s);
   }
 
   //default tape for a turing machine at iteration 0

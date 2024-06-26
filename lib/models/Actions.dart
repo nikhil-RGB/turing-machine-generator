@@ -2,11 +2,12 @@
 
 import 'package:hive_flutter/adapters.dart';
 import 'package:turing_machines/exceptions/action_exceptions.dart';
-
+import 'package:json_annotation/json_annotation.dart';
 //Represents an Action which can be performed on the tape of a turing machine.
 part 'Actions.g.dart';
 
 @HiveType(typeId: 4)
+@JsonSerializable()
 class Actions {
   @HiveField(0)
   String symbol;
@@ -63,6 +64,14 @@ class Actions {
 
   @override
   int get hashCode => symbol.hashCode ^ type.hashCode;
+
+  // Connect the generated function to the `fromJson`
+  // factory.
+  factory Actions.fromJson(Map<String, dynamic> json) =>
+      _$ActionsFromJson(json);
+
+  // Connect the generated  function to the `toJson` method.
+  Map<String, dynamic> toJson() => _$ActionsToJson(this);
 }
 
 @HiveType(typeId: 5)

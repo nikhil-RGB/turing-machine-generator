@@ -1,1 +1,0 @@
-The problem is that the hashmap here uses Configuratiuon, Behaviour pairs. These simply do not exist for Hive.
