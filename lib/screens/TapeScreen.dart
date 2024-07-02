@@ -12,14 +12,16 @@ import 'package:turing_machines/models/Actions.dart' as actions1;
 
 class TapeScreen extends StatefulWidget {
   bool _followHead = true;
+  bool automate = false;
+  int timeGap = 1000;
   final TuringMachine machine;
   TapeScreen({super.key, required this.machine});
   final double tape_cell_width = 50.0;
   @override
-  State<TapeScreen> createState() => _TapeScreenState();
+  State<TapeScreen> createState() => specific();
 }
 
-class _TapeScreenState extends State<TapeScreen> {
+class specific extends State<TapeScreen> {
   final ScrollController _sc = ScrollController();
   final ScrollController _tableScroll = ScrollController();
   @override
@@ -33,15 +35,17 @@ class _TapeScreenState extends State<TapeScreen> {
         child: Scaffold(
       appBar: AppBar(title: const Text("Tape Screen"), actions: <Widget>[
         IconButton(
-            onPressed: () {
-              setState(() {
-                widget.machine
-                    .softReset(); //hard-reset on tape,soft-reset on machine state.
-              });
-            },
-            icon: const Icon(
+            onPressed: (widget.automate)
+                ? null
+                : () {
+                    setState(() {
+                      widget.machine
+                          .softReset(); //hard-reset on tape,soft-reset on machine state.
+                    });
+                  },
+            icon: Icon(
               Icons.restart_alt_rounded,
-              color: Colors.blue,
+              color: (widget.automate) ? Colors.grey : Colors.blue,
             )),
       ]),
       body: Column(
@@ -113,43 +117,79 @@ class _TapeScreenState extends State<TapeScreen> {
                 });
               },
             ),
-          )
+          ),
+          const Gap(5),
+
+          //Put the automate checkbox here, maybe.
+          SizedBox(
+            width: 220,
+            child: CheckboxListTile(
+              title: Text(
+                "Automate Progression",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: (widget.automate) ? Colors.blue : Colors.black,
+                ),
+              ),
+              value: widget.automate,
+              controlAffinity: ListTileControlAffinity.leading,
+              secondary: Icon(
+                Icons.auto_mode_outlined,
+                color: (widget.automate) ? Colors.blue : Colors.black,
+              ),
+              activeColor: Colors.blue,
+              onChanged: (bool? value) {
+                if (value == null) {
+                  return;
+                }
+                setState(() {
+                  widget.automate = value;
+                });
+                if (widget.automate) {
+                  automateProgression();
+                }
+              },
+            ),
+          ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          bool result = true;
-          try {
-            widget.machine.stepIntoConfig();
-          } on InvalidLookupException {
-            result = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Turing Machine has Halted!'),
-                backgroundColor: Colors.red,
-              ),
-            );
-          } on TapeOperationException catch (e) {
-            result = false;
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(e.message),
-                backgroundColor: Colors.red,
-              ),
-            );
-          }
-          if (result) {
-            setState(() {});
-            if (widget._followHead) {
-              _sc.animateTo(
-                (widget.tape_cell_width * widget.machine.tape.pointer),
-                duration: const Duration(milliseconds: 200),
-                curve: Curves.ease,
-              );
-            }
-          }
-        },
-        backgroundColor: Colors.blue,
+        onPressed: (widget.automate)
+            ? null
+            : () {
+                bool result = true;
+                try {
+                  widget.machine.stepIntoConfig();
+                } on InvalidLookupException {
+                  result = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Turing Machine has Halted!'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                } on TapeOperationException catch (e) {
+                  result = false;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(e.message),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
+                if (result) {
+                  setState(() {});
+                  if (widget._followHead) {
+                    _sc.animateTo(
+                      (widget.tape_cell_width * widget.machine.tape.pointer),
+                      duration: const Duration(milliseconds: 200),
+                      curve: Curves.ease,
+                    );
+                  }
+                }
+              },
+        backgroundColor: (widget.automate) ? Colors.grey : Colors.blue,
         child: const Icon(Icons.play_arrow_outlined),
       ),
     ));
@@ -253,7 +293,7 @@ class _TapeScreenState extends State<TapeScreen> {
   }
 
   //This function finds the index of the config matching the parameter, preferring
-  //a specefic symbol over the "any" symbol
+  //a specific symbol over the "any" symbol
   //IMP: Handle case where return result is -1(No match-machine will halt on next operation).
   int findMatch(Configuration configuration) {
     int index = 0;
@@ -275,5 +315,53 @@ class _TapeScreenState extends State<TapeScreen> {
       }
     }
     return -1;
+  }
+
+  Future automateProgression() async {
+    while (widget.automate) {
+      await Future.delayed(
+        Duration(milliseconds: widget.timeGap),
+        () async {
+          if (widget.automate) {
+            bool result = true;
+            try {
+              widget.machine.stepIntoConfig();
+            } on InvalidLookupException {
+              result = false;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Turing Machine has Halted!'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              setState(() {
+                widget.automate = false;
+              });
+            } on TapeOperationException catch (e) {
+              result = false;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(e.message),
+                  backgroundColor: Colors.red,
+                ),
+              );
+              setState(() {
+                widget.automate = false;
+              });
+            }
+            if (result) {
+              setState(() {});
+              if (widget._followHead) {
+                _sc.animateTo(
+                  (widget.tape_cell_width * widget.machine.tape.pointer),
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.ease,
+                );
+              }
+            }
+          }
+        },
+      );
+    }
   }
 }
