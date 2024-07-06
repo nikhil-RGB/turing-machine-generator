@@ -20,19 +20,22 @@ class TuringMachineModelAdapter extends TypeAdapter<TuringMachineModel> {
       initial_config: fields[0] as String,
       configs: (fields[1] as List).cast<Configuration>(),
       behaviours: (fields[2] as List).cast<Behaviour>(),
+      description: fields[3] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, TuringMachineModel obj) {
     writer
-      ..writeByte(3)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.initial_config)
       ..writeByte(1)
       ..write(obj.configs)
       ..writeByte(2)
-      ..write(obj.behaviours);
+      ..write(obj.behaviours)
+      ..writeByte(3)
+      ..write(obj.description);
   }
 
   @override
@@ -59,6 +62,7 @@ TuringMachineModel _$TuringMachineModelFromJson(Map<String, dynamic> json) =>
       behaviours: (json['behaviours'] as List<dynamic>)
           .map((e) => Behaviour.fromJson(e as Map<String, dynamic>))
           .toList(),
+      description: json['description'] as String,
     );
 
 Map<String, dynamic> _$TuringMachineModelToJson(TuringMachineModel instance) =>
@@ -66,4 +70,5 @@ Map<String, dynamic> _$TuringMachineModelToJson(TuringMachineModel instance) =>
       'initial_config': instance.initial_config,
       'configs': instance.configs,
       'behaviours': instance.behaviours,
+      'description': instance.description,
     };

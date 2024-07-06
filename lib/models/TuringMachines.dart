@@ -19,11 +19,14 @@ class TuringMachine {
 
   Tape tape;
 
+  String description;
+
   late LinkedHashMap<Configuration, Behaviour> machine;
   TuringMachine(List<Configuration> configurations, List<Behaviour> behaviours,
       {required this.tape, required this.initial_config})
       : machine = LinkedHashMap(),
-        current_config = initial_config {
+        current_config = initial_config,
+        description = "Enter a description for this turing machine here" {
     //Write code to convert ordered entires into hashmap key-pair values
     // ignore: unnecessary_this
     for (int i = 0; i < configurations.length; i++) {

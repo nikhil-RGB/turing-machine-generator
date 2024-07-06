@@ -16,10 +16,13 @@ class TuringMachineModel {
   List<Configuration> configs;
   @HiveField(2)
   List<Behaviour> behaviours;
+  @HiveField(3)
+  String description;
   TuringMachineModel(
       {required this.initial_config,
       required this.configs,
-      required this.behaviours});
+      required this.behaviours,
+      required this.description});
   //Factory constructor for Model to save this machine object
   factory TuringMachineModel.fromMachine({required TuringMachine machine}) {
     //Construct object from machine object.
@@ -27,6 +30,7 @@ class TuringMachineModel {
       initial_config: machine.initial_config,
       configs: machine.machine.keys.toList(),
       behaviours: machine.machine.values.toList(),
+      description: machine.description,
     );
     //LinkedHashMap to List.
   }
@@ -40,6 +44,7 @@ class TuringMachineModel {
     );
     machine.current_config = initial_config;
     machine.iterations = 0;
+    machine.description = description;
 
     return machine;
   }
