@@ -27,6 +27,7 @@ void main() async {
   Hive.registerAdapter(ActionsAdapter());
   Hive.registerAdapter(ActionTypeAdapter());
   Hive.registerAdapter(TuringMachineModelAdapter());
+  // await Hive.deleteBoxFromDisk("turing_machines");
   await Hive.openBox<TuringMachineModel>("turing_machines");
 
   runApp(const MyApp());
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Turing Machine Generator',
       debugShowCheckedModeBanner: false,
