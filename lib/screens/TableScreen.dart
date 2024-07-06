@@ -102,6 +102,12 @@ class _TableScreenState extends State<TableScreen> {
           actions: [
             IconButton(
                 onPressed: () {
+                  _showInfoSheet();
+                },
+                icon: const Icon(Icons.info_outlined)),
+            const Gap(5),
+            IconButton(
+                onPressed: () {
                   _showInputSheet(context);
                 },
                 icon: const Icon(Icons.save_as_outlined)),
@@ -706,6 +712,72 @@ class _TableScreenState extends State<TableScreen> {
                       readOnly: true,
                       controller: controller,
                       maxLines: 5,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  void _showInfoSheet() {
+    TextEditingController controller =
+        TextEditingController(text: widget.machine.description);
+
+    showModalBottomSheet(
+        useSafeArea: true,
+        isScrollControlled: true,
+        context: context,
+        isDismissible: true,
+        enableDrag: false,
+        builder: (context) {
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Container(
+              height: 320,
+              padding: const EdgeInsets.only(
+                  bottom: 8.0, top: 15, left: 15, right: 15),
+              child: Center(
+                child: Column(
+                  children: [
+                    const Text(
+                      "Description ",
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const Gap(20),
+                    TextField(
+                      maxLength: 500,
+                      controller: controller,
+                      maxLines: 5,
+                    ),
+                    const Gap(5),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          const Gap(7.0),
+                          ElevatedButton(
+                            onPressed: () {
+                              //saving code here
+                              widget.machine.description = controller.text;
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Okay"),
+                          )
+                        ],
+                      ),
                     ),
                   ],
                 ),
