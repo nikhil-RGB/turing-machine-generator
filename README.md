@@ -4,11 +4,11 @@
 > <strong> If you are familiar with what a turing machine is, you can skip directly to the "Screenshots and How to Use" section <br>
 > to familiarize yourself with the software. </strong>
 
-
-
-
 Alan Turing in his 1936 research paper, "On Computable Numbers, with an Application to the Entscheidungsproblem" defined the concept of what is now known as a "Turing Machine".
 Turing's paper majorly dealt with the "computability" of a number, and aiming to find whether the [Entscheidungsproblem](https://en.wikipedia.org/wiki/Entscheidungsproblem) is solvable.
+
+
+
 
 ```
 The "computable" numbers may be described briefly as the real numbers whose expressions as a decimal are calculable by finite means.
@@ -30,12 +30,14 @@ The Entscheidungsproblem, or "decision problem," asked if there was a systematic
 <strong> "Given any Diophantine equation, is there a systematic way (an algorithm) to decide whether or not the equation has an integer solution, without directly solving it?"</strong> 
 
 Alan Turing addressed this question through his conceptualization of the <i><u><strong>Turing Machine</u></strong></i>, a theoretical model for computation.
-
 Turing introduced the idea of computable numbers and functions, essentially defining what problems are solvable through algorithms. He connected this to the Entscheidungsproblem by demonstrating the [Halting Problem](https://en.wikipedia.org/wiki/Halting_problem#:~:text=The%20halting%20problem%20is%20a,equivalent%20to%20a%20Turing%20machine.), which asks whether it's possible to predict if a Turing Machine will stop or run indefinitely for any given input. Turing proved that such prediction is impossible because there is no universal algorithm that can determine the behavior of every Turing Machine.
 
 This impossibility of solving the Halting Problem implies that the Entscheidungsproblem is also unsolvable. There cannot be a universal method to decide the truth or falsehood of every statement in first-order logic. Turing's findings laid foundational concepts in computability and showed the limits of what algorithms can solve, significantly impacting mathematics and computer science.
 
+
+
 ### Brief on the Design and Operation of Turing Machines:
+
 
 > [!IMPORTANT]  
 > The first 6-7 pages of Alan Turing's research paper introduce the concepts of computability, alongside the basic construction and operation of an
@@ -44,9 +46,12 @@ This impossibility of solving the Halting Problem implies that the Entscheidungs
 > m-config c should be e, not c.
 
 
+
 ### Definition
 
 A Turing machine is a finite automaton that can read, write, and erase symbols on an infinitely long tape. The tape is divided into squares, and each square contains a symbol. The Turing machine can only read one symbol at a time, and it uses a set of rules (the transition function) to determine its next action based on the current state and the symbol it is reading.
+
+<br>
 
 ### Definitions for a Turing Machine:
 
@@ -58,6 +63,8 @@ A Turing machine is a finite automaton that can read, write, and erase symbols o
 
 **New M-Config:** After performing the actions based on the scanned symbol and current M-Config, the Turing machine transitions to a new M-Config, representing its updated state.
 
+<br>
+
 #### Operation of a Turing Machine:
 
 **Initial Configuration:** The Turing machine starts in an initial M-Config with the tape containing an initial sequence of symbols.
@@ -66,11 +73,20 @@ A Turing machine is a finite automaton that can read, write, and erase symbols o
 
 **New Configuration:** After processing each symbol, the Turing machine reaches a new M-Config, indicating the completion of one iteration. The current m-configuration is now assigned the value of this new m-config,and computations can continue as long as long there exists a pair of actions and new m-config for the combination of the current m-config and scanned symbol.
 
+<br>
+
 #### Example Table for a Turing Machine:
+
+
+
 Consider a simple example of a Turing machine that prints the sequence 101010..... 
 Here's the transition table representing its behaviour:
 
+<br>
+
 ![IMG_20240402_184816](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/9bd2f6ca-e9a1-4bf5-bf20-78fbb6a264f1)
+
+<br>
 
 #### Modern Mathematical Representation:
 
@@ -86,13 +102,20 @@ It comprises of:
 - and accepting (qaccept)
 - rejecting (qreject) states.
 
+<br>
+
 ## UML:
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/d3379b74-26e0-456d-8704-95a895c8ac81)
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/6018ec60-329a-4418-8029-16a69a1fb119)
+
+
 
 <br>
 
 ## Purpose:
+
 
 This project aims to create a windows desktop application,mobile app and web-app built with flutter which allow users to create their own turing machines, by filling in a table which contains the Configuration and Behaviour attributes. Users can then view the tape while controlling the progression of the machine's state.
 This application is useful to simulate and store Turing Machines encountered in Alan Turing's 1936 reserach paper as it is easier to understand the machines and follow along with this application rather than if you simulated them manually. 
@@ -100,11 +123,16 @@ To save machines, a secure NoSQL database, [Hive](https://pub.dev/packages/hive)
 The logic for the project is available in the lib/models/ folder. You can find the apk/exe file in the [releases](https://github.com/nikhil-RGB/turing-machine-generator/releases)
 section. There is also a [web deployment](https://turing-machines-14433.web.app)
 
+<br>
+
 ## Screenshots and How to Use:
+
+<br>
 
 > [!NOTE]  
 > The project overall, and especially the UI is under development and subject to constant improvement and modification, the following screenshots
 > are representative only of the current state of the application.
+> Please also note that the screenshots of each screen PRECEDES the description of the screen itself.
 
 <br>
 
@@ -117,17 +145,18 @@ section. There is also a [web deployment](https://turing-machines-14433.web.app)
 - This screen presents the user with the option to create a machine from scratch, create a default machine, or load a saved machine.
 - The default machine looks like this:
 
+  <br>
+
 ![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/966c6ee9-9fb3-4dba-a503-d1e9aa36e5bc)
 
+<br>
 
 and simply populates the tape with 0's.
 - Selecting the "Create Machine" or "Default Machine" option will send the user to the Table Screen with a blank table or the default table respectively.
 - Selecting the "Load Machine" option will navigate the application to the Load Machine Screen.
 <br>
 
-
-
- ![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/dac91f15-73ef-430b-8b38-a70c83eed09e)
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/5ff5d78d-815c-4983-b6d6-264f8a9c9eee)
 
 <br>
 
@@ -137,9 +166,25 @@ and simply populates the tape with 0's.
 - The reset icon in the top right will delete ALL saved machines. 
 <br>
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/90685148-5d69-4e41-afa8-0b40b56077f1)
+ <img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/24fea53e-a2c1-4380-a38b-7910b09aa9f2">
 
 <br>
+<br>
+
+This screen also provides the user with the option to import machines from encoded JSON strings(which can be generated on the Table Screen).
+
+#### Importing Machines:
+
+ - Turing Machines can be imported and exported as encoded JSON strings, which allows users to share machines across devices.
+ - To import a machine, click on the 'import/export' icon button on the top-right corner of the 'Load Machine' screen, and paste the machine export JSON string.
+
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/847a14d5-cf6e-413a-867f-7f9e01619d75)
+
+
+<br>
+
 
 #### Table Screen:
 
@@ -147,7 +192,9 @@ and simply populates the tape with 0's.
 > You can save a machine by clicking on the save icon in the top-right.
 > You will get a prompt asking for a name with which the machine can be saved, an empty string is also a valid input.
 > Ensure that the name is not already taken before saving since if there is another machine saved with the same name, it will simply get overwritten with the one being saved.
-> Note also that only the machine table and initial configuration are saved. The machine's state on running it through X iterations will not be saved.
+> Note also that only the machine description, machine table and initial configuration are saved. The machine's state on running it through X iterations will not be saved.
+> Any changes made to the machine after it is saved with a name must ALSO be saved before quitting out if you want the changes to persist. The application does NOT autosave anything at any point.
+> Additionally, users can add a description for their machines by tapping the info Icon Button on the top-right, then editing and saving the text which appears in the description prompt.
 
 - The Table on this screen represents the Turing Machine's behaviour. It consists of the following columns: M-config, Symbol, Actions, New m-config.
 - Each entry in this table, therefore can be read as: While the machine is in [M-config] and the tape-head is reading symbol [Symbol], execute [Actions] and switch into [New m- 
@@ -177,8 +224,25 @@ and simply populates the tape with 0's.
  
 <br>
 
-![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/71e9ec03-6ae3-4f96-a1c8-3811e530d97b)
 
+<img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/a56cc31b-2c6c-4d51-b416-1866ed00b6f2">
+
+<br> 
+
+#### Exporting Machines:
+
+- This screen also provides the facility to export turing machines as JSON strings which you can import on the Load Machine Screen.
+- Click on the 'share' icon on the top-right.
+- This displays the encoded JSON string representation of the machine. Copy this string and share it with your friends.
+
+<br>
+
+![image](https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/35ffd769-581d-417d-b5e8-a5b29c186dbf)
+
+
+ <br>
+
+ 
 ### Tape-Screen:
 
 - The Tape here represents the tape of the turing machine constructed in the previous screen.
@@ -190,25 +254,16 @@ and simply populates the tape with 0's.
   Screen. Navigating back and forth between these two screens **will not** reset the tape, unless you explicitly reset the tape or the entire machine itself via the associated Icon 
   Buttons.
 
-  For any issues with the project, please either open an issue or contact me via e-mail: javakingxi@gmail.com
 
-## Importing and Exporting Machines:
+  #### Automating Progression
 
- - Turing Machines can be imported and exported as encoded JSON strings, which allows users to share machines across devices.
- - To share a machine you created, first click the 'share' icon button on the top right corner of the 'Table Screen', this will show an encoded JSON string representation of the 
-   machine. Copy this string to your clipboard.
- - To import a machine, click on the 'import/export' icon button on the top-right corner of the 'Load Machine' screen, and paste the machine export JSON string.
+  - The progress of the turing machine can be automated on the tape screen via the 'Automate Progression' checkbox. This will make the turing machine advance through m-configs automatically, without user input- until it either halts, or the user disables automatic progression.
+  - All controls on the screen are disabled during automatic progression to prevent inconsistent behaviour.
+  - The time gap between each automatic iteration is 1000 milliseconds by default, but can be changed by clicking on the clock icon on the top-right. Please note that this gap also applies to the 0th automatic iteration.
 
-   <br> <br>
+  <br>
 
-   <img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/c2831091-85dc-4eac-b7b8-8bcc627cf412">
- 
-   <br> <br>
-
-   <img width="1280" alt="image" src="https://github.com/nikhil-RGB/turing-machine-generator/assets/68727041/cac51409-1fa6-4654-a072-ff2bfd7d8f6e">
-
-
-   <br>
+   For any issues with the project, please either open an issue or contact me via e-mail: javakingxi@gmail.com
 
 ## Special Mentions:
 
