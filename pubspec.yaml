@@ -43,6 +43,7 @@ dependencies:
   hive_generator: ^2.0.1
   json_annotation: ^4.9.0
   http: ^1.2.2
+  flutter_secure_storage: ^4.2.1
 
 flutter_launcher_icons:
   android: "launcher_icon"

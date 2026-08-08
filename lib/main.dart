@@ -16,6 +16,7 @@ import 'package:turing_machines/models/Targets.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:io' show Platform;
 import 'package:hive/hive.dart';
+import 'package:turing_machines/services/api_service.dart';
 
 Targets target = MyApp.detectPlatform();
 void main() async {
@@ -39,6 +40,11 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    //FOR API TESTING:
+    ApiService.register("testuser", "testpass123")
+        .then((ok) => print("Register result: $ok"));
+
+    //Testing end
     return MaterialApp(
       title: 'Turing Machine Generator',
       debugShowCheckedModeBanner: false,
